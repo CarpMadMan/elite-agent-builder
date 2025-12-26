@@ -175,8 +175,18 @@ cat > "$LOKI_ROOT/state/orchestrator.json" << 'EOF'
 }
 EOF
 
-# Set startup ID
-sed -i "s/\"startupId\": \"\"/\"startupId\": \"$(uuidgen)\"/" "$LOKI_ROOT/state/orchestrator.json"
+# Set startup ID (macOS compatible)
+if command -v uuidgen &> /dev/null; then
+  STARTUP_ID=$(uuidgen)
+else
+  STARTUP_ID=$(cat /proc/sys/kernel/random/uuid 2>/dev/null || echo "$(date +%s)-$$")
+fi
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i '' "s/\"startupId\": \"\"/\"startupId\": \"$STARTUP_ID\"/" "$LOKI_ROOT/state/orchestrator.json"
+else
+  sed -i "s/\"startupId\": \"\"/\"startupId\": \"$STARTUP_ID\"/" "$LOKI_ROOT/state/orchestrator.json"
+fi
 
 echo "Bootstrap complete: $LOKI_ROOT initialized"
 ```
@@ -451,7 +461,7 @@ LOCK_FILE=".loki/state/locks/queue.lock"
 ) 200>"$LOCK_FILE"
 ```
 
-## Agent Types (30 Total)
+## Agent Types (37 Total)
 
 See `references/agents.md` for complete definitions. Summary:
 
@@ -504,6 +514,21 @@ See `references/agents.md` for complete definitions. Summary:
 | `prod-pm` | Backlog grooming, prioritization, roadmap, specs |
 | `prod-design` | Design system, Figma, UX patterns, prototypes |
 | `prod-techwriter` | API docs, guides, tutorials, release notes |
+
+### Growth Swarm (4 agents)
+| Agent | Capabilities |
+|-------|-------------|
+| `growth-hacker` | Growth experiments, viral loops, referral programs |
+| `growth-community` | Community building, Discord/Slack, ambassador programs |
+| `growth-success` | Customer success, health scoring, churn prevention |
+| `growth-lifecycle` | Email lifecycle, in-app messaging, re-engagement |
+
+### Review Swarm (3 agents)
+| Agent | Capabilities |
+|-------|-------------|
+| `review-code` | Code quality, design patterns, SOLID, maintainability |
+| `review-business` | Requirements alignment, business logic, edge cases |
+| `review-security` | Vulnerabilities, auth/authz, OWASP Top 10 |
 
 ## Distributed Task Queue
 

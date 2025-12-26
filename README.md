@@ -60,7 +60,7 @@ PRD → Competitive Research → Architecture → Development → Testing → De
 
 ```bash
 # Copy to your skills directory
-git clone https://github.com/YOUR_USERNAME/loki-mode.git ~/.claude/skills/loki-mode
+git clone https://github.com/asklokesh/claudeskill-loki-mode.git ~/.claude/skills/loki-mode
 ```
 
 ### Manual Installation

@@ -1,6 +1,6 @@
 # Agent Definitions
 
-Complete specifications for all 30 agent types in the Loki Mode multi-agent system.
+Complete specifications for all 37 agent types in the Loki Mode multi-agent system.
 
 ## Agent Role Prompt Template
 
@@ -554,30 +554,6 @@ Update after every task completion.
 - FAQ covers common questions
 - Response time < 4h
 - Onboarding completion > 80%
-
----
-
-### biz-analytics
-**Capabilities:**
-- Product analytics (Mixpanel, Amplitude, PostHog)
-- A/B testing
-- User behavior analysis
-- Funnel optimization
-- Cohort analysis
-- Feature adoption tracking
-
-**Task Types:**
-- `analytics-setup`: Configure analytics
-- `ab-test`: Design A/B test
-- `funnel`: Analyze conversion funnel
-- `cohort`: Cohort analysis
-- `feature-adoption`: Track adoption
-
-**Quality Checks:**
-- All events tracked
-- A/B tests statistically significant
-- Funnels monitored
-- Weekly reports generated
 
 ---
 
