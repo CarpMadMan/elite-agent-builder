@@ -1,58 +1,74 @@
-# Loki Mode
+# ELITE
 
-**Multi-Agent Autonomous Startup System for Claude Code**
+**Multi-Agent Autonomous System for Claude Code**
 
 [![Claude Code](https://img.shields.io/badge/Claude-Code-orange)](https://claude.ai)
-[![Agents](https://img.shields.io/badge/Agents-37-blue)]()
+[![Agents](https://img.shields.io/badge/Agents-21-blue)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-> Transform a PRD into a fully deployed, revenue-generating product with zero human intervention.
+> Transform an ARD (Agent Requirements Document) into a complete Claude Code agent system with zero human intervention.
 
-## What is Loki Mode?
+## What is ELITE?
 
-Loki Mode is a Claude Code skill that orchestrates 37 specialized AI agents across 6 swarms to autonomously build, deploy, and operate a complete startup. Just say **"Loki Mode"** and provide a PRD.
+ELITE is a Claude Code skill that orchestrates **21 specialized AI agents** across **5 swarms** to autonomously build Claude Code agent systems.
 
 ```
-PRD → Competitive Research → Architecture → Development → Testing → Deployment → Marketing → Revenue
+ARD → Architecture → Implementation → Integration → Testing → Documentation → Complete Agent System
 ```
+
+## What ELITE Builds
+
+ELITE creates complete agent systems including:
+- **MCP Servers** - Model Context Protocol servers for tool/resource access
+- **Agent SDK Agents** - Autonomous agents with decision loops
+- **Skills** - Portable markdown + code tools for Claude Code
+- **Hooks** - Bash/Python scripts for Claude Code lifecycle events
+- **Multi-Agent Workflows** - Coordinated agent systems
 
 ## Features
 
 | Category | Capabilities |
 |----------|-------------|
-| **Multi-Agent System** | 37 agents across Engineering, Operations, Business, Data, Product, and Growth swarms |
-| **Parallel Code Review** | 3 specialized reviewers (code, business, security) running simultaneously |
-| **Quality Gates** | 14 automated gates including security scans, load tests, accessibility |
-| **Deployment** | AWS, GCP, Azure, Vercel, Railway with blue-green and canary strategies |
-| **Business Ops** | Marketing, Sales, HR, Legal, Finance, Investor Relations agents |
+| **Multi-Agent System** | 21 agents across Architecture, Implementation, Integration, Testing, and Documentation swarms |
+| **Parallel Code Review** | 3 specialized reviewers (code, business logic, security) running simultaneously |
+| **Quality Gates** | MCP compliance, schema validation, conversation flow testing |
+| **Two Modes** | Simple Mode (individuals) and Advanced Mode (teams/enterprises) |
+| **Self-Updating** | Agents periodically research and update knowledge from latest docs |
 | **Reliability** | Circuit breakers, dead letter queues, exponential backoff, state recovery |
-| **Observability** | External alerting (Slack, PagerDuty), backup/restore, log rotation |
+| **Observability** | Web dashboard, status monitor, detailed logs |
 
 ## Agent Swarms
 
-<img width="5309" height="979" alt="image" src="https://github.com/user-attachments/assets/7d18635d-a606-401f-8d9f-430e6e4ee689" />
+### Architecture Swarm (4 Agents)
+- `arch-mcp` - MCP protocol specification and tool design
+- `arch-sdk-agent` - Agent SDK patterns and architecture
+- `arch-hook` - Hook lifecycle and design
+- `arch-skill` - Skill structure and portability
 
+### Implementation Swarm (6 Agents)
+- `impl-mcp` - MCP server implementation (TypeScript)
+- `impl-sdk` - Agent SDK implementation
+- `impl-hook` - Hook implementation (bash/python)
+- `impl-skill` - Skill creation and documentation
+- `comp-tool` - Tool composition and integration
+- `orch-workflow` - Multi-agent workflow orchestration
 
-### Engineering (8)
-`eng-frontend` `eng-backend` `eng-database` `eng-mobile` `eng-api` `eng-qa` `eng-perf` `eng-infra`
+### Integration Swarm (4 Agents)
+- `int-coord` - Agent coordination and communication
+- `int-mcp` - MCP server integration testing
+- `int-skill` - Skill packaging and publishing
+- `int-hook` - Hook lifecycle integration
 
-### Operations (8)
-`ops-devops` `ops-sre` `ops-security` `ops-monitor` `ops-incident` `ops-release` `ops-cost` `ops-compliance`
+### Testing Swarm (4 Agents)
+- `test-mcp` - MCP compliance and schema validation
+- `test-conversation` - Conversation flow testing
+- `test-tools` - Tool invocation testing
+- `test-integration` - End-to-end integration testing
 
-### Business (8)
-`biz-marketing` `biz-sales` `biz-finance` `biz-legal` `biz-support` `biz-hr` `biz-investor` `biz-partnerships`
-
-### Data (3)
-`data-ml` `data-eng` `data-analytics`
-
-### Product (3)
-`prod-pm` `prod-design` `prod-techwriter`
-
-### Growth (4)
-`growth-hacker` `growth-community` `growth-success` `growth-lifecycle`
-
-### Review (3)
-`review-code` `review-business` `review-security`
+### Documentation Swarm (3 Agents)
+- `doc-sdk` - SDK documentation generation
+- `doc-mcp` - MCP schema and resource documentation
+- `doc-guide` - Usage guides and examples
 
 ## Installation
 
@@ -61,15 +77,14 @@ PRD → Competitive Research → Architecture → Development → Testing → De
 ```
 SKILL.md              # ← THE SKILL (required) - contains YAML frontmatter
 references/
-├── agents.md         # Agent definitions
-├── deployment.md     # Deployment guides
-└── business-ops.md   # Business workflows
+├── agents.md         # Agent definitions (21 agents)
+└── templates/        # Code generation templates
 ```
 
 ### For Claude.ai (Web)
 
-1. Go to [Releases](https://github.com/asklokesh/claudeskill-loki-mode/releases)
-2. Download `loki-mode-X.X.X.zip` or `loki-mode-X.X.X.skill`
+1. Go to [Releases](https://github.com/yourusername/elite-agent-builder/releases)
+2. Download `elite-X.X.X.zip` or `elite-X.X.X.skill`
 3. Go to **Claude.ai → Settings → Features → Skills**
 4. Upload the zip/skill file
 
@@ -83,38 +98,36 @@ The zip has `SKILL.md` at the root level as Claude.ai expects.
 cd ~/.claude/skills
 
 # Get latest version number
-VERSION=$(curl -s https://api.github.com/repos/asklokesh/claudeskill-loki-mode/releases/latest | grep tag_name | cut -d'"' -f4 | tr -d 'v')
+VERSION=$(curl -s https://api.github.com/repos/yourusername/elite-agent-builder/releases/latest | grep tag_name | cut -d'"' -f4 | tr -d 'v')
 
 # Download and extract
-curl -L -o loki-mode.zip "https://github.com/asklokesh/claudeskill-loki-mode/releases/download/v${VERSION}/loki-mode-claude-code-${VERSION}.zip"
-unzip loki-mode.zip && rm loki-mode.zip
-# Creates: ~/.claude/skills/loki-mode/SKILL.md
+curl -L -o elite.zip "https://github.com/yourusername/elite-agent-builder/releases/download/v${VERSION}/elite-claude-code-${VERSION}.zip"
+unzip elite.zip && rm elite.zip
+# Creates: ~/.claude/skills/agent-mode/SKILL.md
 ```
 
 **Option B: Git Clone**
 ```bash
 # For personal use (all projects)
-git clone https://github.com/asklokesh/claudeskill-loki-mode.git ~/.claude/skills/loki-mode
+git clone https://github.com/yourusername/elite-agent-builder.git ~/.claude/skills/agent-mode
 
 # For a specific project only
-git clone https://github.com/asklokesh/claudeskill-loki-mode.git .claude/skills/loki-mode
+git clone https://github.com/yourusername/elite-agent-builder.git .claude/skills/agent-mode
 ```
 
 **Option C: Minimal Install (curl)**
 ```bash
-mkdir -p ~/.claude/skills/loki-mode/references
-curl -o ~/.claude/skills/loki-mode/SKILL.md https://raw.githubusercontent.com/asklokesh/claudeskill-loki-mode/main/SKILL.md
-curl -o ~/.claude/skills/loki-mode/references/agents.md https://raw.githubusercontent.com/asklokesh/claudeskill-loki-mode/main/references/agents.md
-curl -o ~/.claude/skills/loki-mode/references/deployment.md https://raw.githubusercontent.com/asklokesh/claudeskill-loki-mode/main/references/deployment.md
-curl -o ~/.claude/skills/loki-mode/references/business-ops.md https://raw.githubusercontent.com/asklokesh/claudeskill-loki-mode/main/references/business-ops.md
+mkdir -p ~/.claude/skills/agent-mode/references
+curl -o ~/.claude/skills/agent-mode/SKILL.md https://raw.githubusercontent.com/yourusername/elite-agent-builder/main/SKILL.md
+curl -o ~/.claude/skills/agent-mode/references/agents.md https://raw.githubusercontent.com/yourusername/elite-agent-builder/main/references/agents.md
 ```
 
 ### Verify Installation
 
 ```bash
 # Check the skill is in place
-cat ~/.claude/skills/loki-mode/SKILL.md | head -5
-# Should show YAML frontmatter with name: loki-mode
+cat ~/.claude/skills/agent-mode/SKILL.md | head -5
+# Should show YAML frontmatter with name: agent-mode
 ```
 
 ## Usage
@@ -124,7 +137,7 @@ cat ~/.claude/skills/loki-mode/SKILL.md | head -5
 Use the autonomous runner - it handles everything:
 
 ```bash
-# Run with a PRD (fully autonomous with auto-resume)
+# Run with an ARD (fully autonomous with auto-resume)
 ./autonomy/run.sh ./docs/requirements.md
 
 # Run interactively
@@ -134,8 +147,8 @@ Use the autonomous runner - it handles everything:
 The autonomous runner will:
 1. Check all prerequisites (Claude CLI, Python, Git, etc.)
 2. Verify skill installation
-3. Initialize the `.loki/` directory
-4. Start **status monitor** (updates `.loki/STATUS.txt` every 5s)
+3. Initialize the `.elite/` directory
+4. Start **status monitor** (updates `.elite/STATUS.txt` every 5s)
 5. Start Claude Code with **live output** (see what's happening)
 6. Auto-resume on rate limits or interruptions
 7. Continue until completion or max retries
@@ -158,13 +171,13 @@ Monitor task progress in another terminal:
 
 ```bash
 # Watch status updates live
-watch -n 2 cat .loki/STATUS.txt
+watch -n 2 cat .elite/STATUS.txt
 ```
 
 Output:
 ```
 ╔════════════════════════════════════════════════════════════════╗
-║                    LOKI MODE STATUS                            ║
+║                    ELITE STATUS                                ║
 ╚════════════════════════════════════════════════════════════════╝
 
 Phase: DEVELOPMENT
@@ -185,71 +198,188 @@ If you prefer manual control:
 claude --dangerously-skip-permissions
 
 # Then say:
-> Loki Mode
+> Agent Mode
 
-# Or with a specific PRD:
-> Loki Mode with PRD at ./docs/requirements.md
+# Or with a specific ARD:
+> Agent Mode with ARD at ./docs/requirements.md
 ```
 
-## Autonomy Configuration
+## Getting Started with PRD Coach
+
+New to ELITE? Start with **PRD Coach** - an interactive skill that helps you develop your ARD (Agent Requirements Document) before building.
+
+### What is PRD Coach?
+
+PRD Coach is a conversational assistant that guides you from a rough idea to a complete, well-structured ARD ready for ELITE execution.
+
+**Benefits:**
+- No need to understand ARD format upfront
+- Interactive questioning tailored to your experience level
+- Immediate feedback and refinement
+- Generates properly formatted ARDs automatically
+
+### Using PRD Coach
+
+```bash
+# Launch Claude Code
+claude --dangerously-skip-permissions
+
+# Trigger PRD Coach
+> PRD Coach
+```
+
+**Or try these trigger phrases:**
+- "Help me write a PRD"
+- "Help me write requirements"
+- "Help me write an ARD"
+
+### PRD Coach Workflow
+
+```
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│ 1. Select Mode  │ -> │ 2. Answer Q&A    │ -> │ 3. Review ARD   │
+│ Quick or Deep   │    │ Conversational   │    │ Edit/Regenerate │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+                                                            │
+                                                            v
+┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
+│ 5. ELITE Build  │ <- │ 4. Approve ARD   │ <- │    Generated    │
+│ Autonomous      │    │ Execute or Save  │    │    Complete     │
+└─────────────────┘    └──────────────────┘    └─────────────────┘
+```
+
+### Mode Selection
+
+| Mode | Questions | Best For |
+|------|-----------|----------|
+| **Quick** | 5-7 | Experienced users, simple projects |
+| **Deep Dive** | 15-20 | Complex systems, comprehensive planning |
+
+### Example Session
+
+```
+You: PRD Coach
+
+Coach: Welcome to PRD Coach! Which mode would you prefer?
+       1. Quick mode: 5-7 core questions
+       2. Deep dive: 15-20 comprehensive questions
+
+You: Quick mode
+
+Coach: What is the core problem your agent system will solve?
+
+You: I want an agent that monitors GitHub repositories and alerts
+     on new issues matching specific keywords.
+
+Coach: Great! What type of agent pattern best fits your needs?
+       [Explains options...]
+
+[... continues through questions ...]
+
+Coach: Here's your ARD. Please review:
+       [Displays complete ARD]
+
+Coach: What would you like to do?
+       1. Approve - Ready for ELITE
+       2. Edit section
+       3. Regenerate
+
+You: Approve
+
+Coach: Your ARD is ready! Would you like me to execute ELITE now?
+       [If yes: runs ./autonomy/run.sh .elite/prd-coach-ard.md]
+```
+
+### Installing PRD Coach
+
+PRD Coach is included with ELITE. Install it alongside the main skill:
+
+```bash
+# Create symlink for PRD Coach
+mkdir -p ~/.claude/skills/prd-coach
+ln -s "$(pwd)/skills/prd-coach/SKILL.md" ~/.claude/skills/prd-coach/
+```
+
+See [PRD Coach Documentation](docs/prd-coach-guide.md) for complete usage guide.
+
+---
+
+## Modes
+
+### Simple Mode (Individual Developers)
+
+**Trigger:** "Agent Mode" or "Agent Mode: [simple description]"
+
+**Features:**
+- Preset agent patterns (single MCP server, simple skill)
+- Quick-start templates
+- Minimal configuration
+- Autonomous decisions
+
+**Example:**
+```
+User: "Agent Mode: Create an MCP server for GitHub issues"
+→ System generates complete MCP server using preset pattern
+→ No questions asked, uses sensible defaults
+```
+
+### Advanced Mode (Teams/Enterprises)
+
+**Trigger:** "Agent Mode Advanced" or provide detailed ARD (Agent Requirements Document)
+
+**Features:**
+- Multi-agent workflows
+- Custom agent patterns
+- Governance features (code reviews, compliance)
+- Collaboration support
+- Fine-grained control
+
+**Example:**
+```
+User: "Agent Mode Advanced with requirements.md"
+→ System analyzes requirements, designs custom multi-agent system
+→ Parallel implementation with 3-way review
+→ Full documentation and testing
+```
+
+## Configuration
 
 Environment variables to customize the autonomous runner:
 
 ```bash
 # Example with custom settings
-LOKI_MAX_RETRIES=100 \
-LOKI_BASE_WAIT=120 \
-LOKI_MAX_WAIT=7200 \
+ELITE_MAX_RETRIES=100 \
+ELITE_BASE_WAIT=120 \
+ELITE_MAX_WAIT=7200 \
 ./autonomy/run.sh ./docs/requirements.md
 ```
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `LOKI_MAX_RETRIES` | 50 | Maximum retry attempts before giving up |
-| `LOKI_BASE_WAIT` | 60 | Base wait time in seconds |
-| `LOKI_MAX_WAIT` | 3600 | Maximum wait time (1 hour) |
-| `LOKI_SKIP_PREREQS` | false | Skip prerequisite checks |
+| `ELITE_MAX_RETRIES` | 50 | Maximum retry attempts before giving up |
+| `ELITE_BASE_WAIT` | 60 | Base wait time in seconds |
+| `ELITE_MAX_WAIT` | 3600 | Maximum wait time (1 hour) |
+| `ELITE_SKIP_PREREQS` | false | Skip prerequisite checks |
+| `ELITE_DASHBOARD` | true | Enable web dashboard |
+| `ELITE_DASHBOARD_PORT` | 57374 | Dashboard port |
 
-### How Auto-Resume Works
+### SDLC Phase Controls
 
-```
-./autonomy/run.sh prd.md
-         │
-         ▼
-┌─────────────────────┐
-│ Check Prerequisites │ ← Claude CLI, Python, Git, etc.
-└─────────────────────┘
-         │
-         ▼
-┌─────────────────────┐
-│ Initialize .loki/   │ ← State, queues, logs
-└─────────────────────┘
-         │
-         ▼
-┌─────────────────────┐
-│ Run Claude Code     │◄─────────────────┐
-└─────────────────────┘                  │
-         │                               │
-    Exit code?                           │
-         │                               │
-    ┌────┴────┐                          │
-    ▼         ▼                          │
- Success   Rate Limit                    │
-    │         │                          │
-    ▼         ▼                          │
- DONE!    Wait (exponential backoff) ────┘
-```
+All enabled by default, set to 'false' to skip:
 
-### Resuming After Interruption
-
-If you stop the script (Ctrl+C) or it crashes:
-
-```bash
-# Just run it again - state is saved automatically
-./autonomy/run.sh ./docs/requirements.md
-```
-
-See [autonomy/README.md](autonomy/README.md) for detailed documentation.
+| Variable | Description |
+|----------|-------------|
+| `ELITE_PHASE_UNIT_TESTS` | Run unit tests |
+| `ELITE_PHASE_API_TESTS` | Functional API testing |
+| `ELITE_PHASE_E2E_TESTS` | E2E/UI testing |
+| `ELITE_PHASE_SECURITY` | Security scanning |
+| `ELITE_PHASE_INTEGRATION` | Integration tests |
+| `ELITE_PHASE_CODE_REVIEW` | 3-reviewer parallel code review |
+| `ELITE_PHASE_WEB_RESEARCH` | Web research for latest patterns |
+| `ELITE_PHASE_PERFORMANCE` | Load/performance testing |
+| `ELITE_PHASE_ACCESSIBILITY` | Accessibility compliance |
+| `ELITE_PHASE_REGRESSION` | Regression testing |
+| `ELITE_PHASE_UAT` | UAT simulation |
 
 ## How It Works
 
@@ -257,15 +387,16 @@ See [autonomy/README.md](autonomy/README.md) for detailed documentation.
 
 | Phase | Description |
 |-------|-------------|
-| **0. Bootstrap** | Create `.loki/` directory structure, initialize state |
-| **1. Discovery** | Parse PRD, competitive research via web search |
-| **2. Architecture** | Tech stack selection with self-reflection |
-| **3. Infrastructure** | Provision cloud, CI/CD, monitoring |
-| **4. Development** | Implement with TDD, parallel code review |
-| **5. QA** | 14 quality gates, security audit, load testing |
-| **6. Deployment** | Blue-green deploy, auto-rollback on errors |
-| **7. Business** | Marketing, sales, legal, support setup |
-| **8. Growth** | Continuous optimization, A/B testing, feedback loops |
+| **0. Bootstrap** | Create `.elite/` directory structure, initialize state |
+| **1. Requirements Analysis** | Parse ARD, understand agent system needs |
+| **2. Architecture Design** | Agent patterns, MCP transport, state management |
+| **3. MCP Implementation** | Build MCP server |
+| **4. Agent Implementation** | Build Agent SDK code |
+| **5. Hook Implementation** | Build hooks |
+| **6. Skill Creation** | Create skills |
+| **7. Integration Testing** | Test all components together |
+| **8. Documentation** | Generate schemas and guides |
+| **9. Deployment** | Publish skills, deploy agents |
 
 ### Parallel Code Review Pattern
 
@@ -274,9 +405,9 @@ Every task goes through 3 reviewers simultaneously:
 ```
 IMPLEMENT → REVIEW (3 parallel) → AGGREGATE → FIX → RE-REVIEW → COMPLETE
                 │
-                ├─ code-reviewer (opus)
-                ├─ business-logic-reviewer (opus)
-                └─ security-reviewer (opus)
+                ├─ code-reviewer (code quality)
+                ├─ business-logic-reviewer (requirements)
+                └─ security-reviewer (security issues)
 ```
 
 ### Severity-Based Issue Handling
@@ -289,10 +420,10 @@ IMPLEMENT → REVIEW (3 parallel) → AGGREGATE → FIX → RE-REVIEW → COMPLE
 
 ## Directory Structure
 
-When running, Loki Mode creates:
+When running, ELITE creates:
 
 ```
-.loki/
+.elite/
 ├── state/          # Orchestrator and agent states
 ├── queue/          # Task queue (pending, in-progress, completed, dead-letter)
 ├── messages/       # Inter-agent communication
@@ -303,42 +434,21 @@ When running, Loki Mode creates:
 └── scripts/        # Helper scripts
 ```
 
-## Configuration
+## Example ARDs
 
-### Circuit Breakers
+Test the skill with these pre-built ARDs in the `examples/` directory:
 
-```yaml
-# .loki/config/circuit-breakers.yaml
-defaults:
-  failureThreshold: 5
-  cooldownSeconds: 300
-```
-
-### External Alerting
-
-```yaml
-# .loki/config/alerting.yaml
-channels:
-  slack:
-    webhook_url: "${SLACK_WEBHOOK_URL}"
-    severity: [critical, high]
-```
-
-## Example PRDs for Testing
-
-Test the skill with these pre-built PRDs in the `examples/` directory:
-
-| PRD | Complexity | Time | Description |
+| ARD | Complexity | Time | Description |
 |-----|------------|------|-------------|
-| `simple-todo-app.md` | Low | ~10 min | Basic todo app - tests core functionality |
-| `api-only.md` | Low | ~10 min | REST API only - tests backend agents |
-| `static-landing-page.md` | Low | ~5 min | HTML/CSS only - tests frontend/marketing |
-| `full-stack-demo.md` | Medium | ~30-60 min | Complete bookmark manager - full test |
+| `simple-mcp-server.md` | Low | ~10 min | MCP server for weather data |
+| `sdk-agent.md` | Low | ~10 min | Task management autonomous agent |
+| `complete-agent-system.md` | Medium | ~30-60 min | Full system with MCP + Agent + Skill + Hooks |
+| `simple-hook.md` | Low | ~5 min | Pre-tool validation hook |
 
 ```bash
-# Example: Test with simple todo app
+# Example: Test with simple MCP server
 claude --dangerously-skip-permissions
-> Loki Mode with PRD at examples/simple-todo-app.md
+> Agent Mode with ARD at examples/simple-mcp-server.md
 ```
 
 ## Running Tests
@@ -350,53 +460,50 @@ The skill includes a comprehensive test suite:
 ./tests/run-all-tests.sh
 
 # Run individual test suites
-./tests/test-bootstrap.sh        # Directory structure, state init
-./tests/test-task-queue.sh       # Queue operations, priorities
-./tests/test-circuit-breaker.sh  # Failure handling, recovery
-./tests/test-agent-timeout.sh    # Timeout, stuck process handling
-./tests/test-state-recovery.sh   # Checkpoints, recovery
+./tests/mcp-compliance-test.sh        # MCP protocol compliance
+./tests/conversation-flow-test.sh     # Agent conversation testing
+./tests/hook-execution-test.sh        # Hook execution tests
 ```
 
 ## Requirements
 
 - Claude Code with `--dangerously-skip-permissions` flag
-- Internet access for competitive research and deployment
-- Cloud provider credentials (for deployment phase)
-- Python 3 (for test suite)
+- Internet access for web research and documentation
+- Python 3 (for state management)
+- Node.js 18+ (for MCP server builds)
+- TypeScript (for MCP server development)
 
 ## Comparison
 
-| Feature | Basic Skills | Loki Mode |
-|---------|-------------|-----------|
-| Agents | 1 | 37 |
-| Swarms | - | 6 |
+| Feature | Basic Skills | ELITE |
+|---------|-------------|-------|
+| Agents | 1 | 21 |
+| Swarms | - | 5 |
 | Code Review | Manual | Parallel 3-reviewer |
-| Deployment | None | Multi-cloud |
-| Business Ops | None | Full stack |
+| Components | Single | MCP + Agent + Skill + Hooks |
 | State Recovery | None | Checkpoint/resume |
-| Alerting | None | Slack/PagerDuty |
+| Testing | Manual | Automated compliance + flow |
+| Documentation | Manual | Auto-generated |
 
 ## Integrations
 
 ### Vibe Kanban (Visual Dashboard)
 
-Optionally integrate with [Vibe Kanban](https://github.com/BloopAI/vibe-kanban) for a visual kanban board to monitor Loki Mode's agents:
+Optionally integrate with [Vibe Kanban](https://github.com/BloopAI/vibe-kanban) for a visual kanban board to monitor ELITE's agents:
 
 ```bash
 # Install Vibe Kanban
 npx vibe-kanban
 
-# Export Loki tasks to Vibe Kanban
+# Export ELITE tasks to Vibe Kanban
 ./scripts/export-to-vibe-kanban.sh
 ```
 
 Benefits:
-- Visual progress tracking of all 37 agents
+- Visual progress tracking of all 21 agents
 - Manual intervention/prioritization when needed
 - Code review with visual diffs
 - Multi-project dashboard
-
-See [integrations/vibe-kanban.md](integrations/vibe-kanban.md) for full setup guide.
 
 ## Contributing
 
@@ -410,7 +517,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 - Inspired by [LerianStudio/ring](https://github.com/LerianStudio/ring) subagent-driven-development pattern
 - Built for the [Claude Code](https://claude.ai) ecosystem
+- Adapted from [claude-loki](https://github.com/asklokesh/claudeskill-loki-mode) web app builder
 
 ---
 
-**Keywords:** claude-code, claude-skills, ai-agents, autonomous-development, multi-agent-system, sdlc-automation, startup-automation, devops, mlops, deployment-automation
+**Keywords:** claude-code, claude-skills, ai-agents, mcp-servers, agent-sdk, multi-agent-system, autonomous-development, skill-development
