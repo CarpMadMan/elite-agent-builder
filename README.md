@@ -8,6 +8,21 @@
 
 > Transform an ARD (Agent Requirements Document) into a complete Claude Code agent system with zero human intervention.
 
+## Quick Start
+
+**New here?** Start with the [Quick Start Guide](QUICKSTART.md) - get running in 3 minutes.
+
+```bash
+# Automated setup (recommended)
+./scripts/setup.sh
+
+# Then run ELITE
+claude --dangerously-skip-permissions
+> Agent Mode
+```
+
+**Experienced users?** Jump to [Usage](#usage) or [Modes](#modes).
+
 ## What is ELITE?
 
 ELITE is a Claude Code skill that orchestrates **21 specialized AI agents** across **5 swarms** to autonomously build Claude Code agent systems.
@@ -16,10 +31,47 @@ ELITE is a Claude Code skill that orchestrates **21 specialized AI agents** acro
 ARD → Architecture → Implementation → Integration → Testing → Documentation → Complete Agent System
 ```
 
+## Why `--dangerously-skip-permissions`?
+
+You'll see this flag throughout ELITE's documentation. Here's why it's required:
+
+### What It Does
+
+The `--dangerously-skip-permissions` flag allows Claude Code to execute commands **without interactive confirmation prompts**. Without this flag, Claude Code would stop at every file write, directory creation, or command execution to ask for permission.
+
+### Why ELITE Needs It
+
+ELITE is a **fully autonomous system** that orchestrates 21 specialized agents. A typical build involves:
+- Creating 50+ directories and files
+- Running 20+ npm/git/bash commands
+- Executing multiple test suites
+- Generating documentation
+
+With interactive permissions, this would require **hundreds of manual confirmations**, defeating ELITE's autonomous purpose.
+
+### Is It Safe?
+
+**Within this repository:** Yes. Here's why:
+- ELITE only operates within the `.elite/` directory and project output folders
+- It doesn't modify system files or your personal data
+- All generated code is in your project directory, not system directories
+
+**General caution:** This flag should **only** be used with trusted code/repositories. Never run with this flag for untrusted AI agents or code from unknown sources.
+
+### Best Practices
+
+1. **Review the ARD first** - Understand what will be built
+2. **Check .elite/ directory** - See what's being created
+3. **Read generated code** - Review before deploying
+4. **Use version control** - Commit before running, rollback if needed
+
 ## What ELITE Builds
 
 ELITE creates complete agent systems including:
 - **MCP Servers** - Model Context Protocol servers for tool/resource access
+
+> **Important:** ELITE **generates** MCP servers as output. This is different from "configuring MCP" in Claude Code settings. ELITE builds the actual server code that you can then integrate with Claude Code.
+
 - **Agent SDK Agents** - Autonomous agents with decision loops
 - **Skills** - Portable markdown + code tools for Claude Code
 - **Hooks** - Bash/Python scripts for Claude Code lifecycle events
@@ -91,6 +143,45 @@ references/
 The zip has `SKILL.md` at the root level as Claude.ai expects.
 
 ### For Claude Code (CLI)
+
+**Recommended: Use setup script (cross-platform)**
+```bash
+# Unix/macOS/Linux
+./scripts/setup.sh
+
+# Windows PowerShell
+.\scripts\setup.ps1
+```
+
+This will check dependencies, install the ELITE skill, and create configuration templates.
+
+**Manual Installation**
+
+**Unix/macOS/Linux:**
+```bash
+# For personal use (all projects)
+mkdir -p ~/.claude/skills/agent-mode
+cp SKILL.md ~/.claude/skills/agent-mode/
+cp -r references ~/.claude/skills/agent-mode/
+
+# For a specific project only
+mkdir -p .claude/skills/agent-mode
+cp SKILL.md .claude/skills/agent-mode/
+cp -r references .claude/skills/agent-mode/
+```
+
+**Windows:**
+```powershell
+# For personal use (all projects)
+mkdir $env:USERPROFILE\.claude\skills\agent-mode
+copy SKILL.md $env:USERPROFILE\.claude\skills\agent-mode\
+xcopy /E /I references $env:USERPROFILE\.claude\skills\agent-mode\references
+
+# For a specific project only
+mkdir .claude\skills\agent-mode
+copy SKILL.md .claude\skills\agent-mode\
+xcopy /E /I references .claude\skills\agent-mode\references
+```
 
 **Option A: Download from Releases**
 ```bash

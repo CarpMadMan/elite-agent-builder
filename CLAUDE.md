@@ -15,6 +15,22 @@ The system generates:
 
 ## Key Commands
 
+### Initial Setup (First Time Only)
+
+```bash
+# Automated setup - checks and installs dependencies (recommended)
+./scripts/setup.sh         # Unix/macOS/Linux
+.\scripts\setup.ps1        # Windows PowerShell
+```
+
+This will:
+- Check for Claude Code CLI (provide installation instructions if missing)
+- Verify Node.js 18+
+- Verify Python 3
+- Install TypeScript globally
+- Install ELITE skill to ~/.claude/skills/agent-mode/
+- Create .env.example for configuration
+
 ### Autonomous Execution (Recommended)
 ```bash
 # Fully autonomous with auto-resume
@@ -219,6 +235,28 @@ ELITE_DASHBOARD_PORT=57374  # Dashboard port
 Set to 'false' to skip: `ELITE_PHASE_UNIT_TESTS`, `ELITE_PHASE_API_TESTS`, `ELITE_PHASE_CODE_REVIEW`, etc.
 
 ## Dependencies
+
+### Automated Setup
+
+For first-time setup, run the automated setup script:
+
+```bash
+# Unix/macOS/Linux
+./scripts/setup.sh
+
+# Windows PowerShell
+.\scripts\setup.ps1
+```
+
+This will:
+- Check for Claude Code CLI (provide installation instructions if missing)
+- Verify Node.js 18+
+- Verify Python 3
+- Install TypeScript globally
+- Install ELITE skill to ~/.claude/skills/agent-mode/
+- Create .env.example for configuration
+
+### Manual Requirements
 
 - **Claude Code CLI** with `--dangerously-skip-permissions`
 - **Python 3** (for state management)
