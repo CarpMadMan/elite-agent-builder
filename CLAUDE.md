@@ -116,13 +116,13 @@ npm start
 ```
 SKILL.md                 # Main skill definition (triggered by "Agent Mode")
 references/
-├── agents.md           # 21 agent specifications
-└── templates/          # Code generation templates
-    ├── mcp-server/     # MCP server template (TypeScript)
-    ├── sdk-agent/      # Agent SDK template
-    ├── hook/           # Hook templates
-    ├── skill/          # Skill templates
-    └── workflow/       # Workflow templates
+└── agents.md           # 21 agent specifications
+templates/              # Code generation templates
+├── mcp-server/         # MCP server template (TypeScript)
+├── sdk-agent/          # Agent SDK template
+├── hook/               # Hook templates
+├── skill/              # Skill templates
+└── workflow/           # Workflow templates
 examples/               # Sample ARDs for testing
 autonomy/
 └── run.sh              # Main autonomous execution script
