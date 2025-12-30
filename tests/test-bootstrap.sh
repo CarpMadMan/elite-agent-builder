@@ -28,16 +28,16 @@ trap cleanup EXIT
 cd "$TEST_DIR"
 
 echo "========================================"
-echo "Loki Mode Bootstrap Tests"
+echo "ELITE Bootstrap Tests"
 echo "========================================"
 echo "Test directory: $TEST_DIR"
 echo ""
 
 # Test 1: Directory structure creation
 log_test "Directory structure creation"
-mkdir -p .loki/{state/{agents,checkpoints,locks},queue,messages/{inbox,outbox,broadcast},logs/{agents,decisions,archive},config,prompts,artifacts/{releases,reports,metrics,backups},scripts}
+mkdir -p .elite/{state/{agents,checkpoints,locks},queue,messages/{inbox,outbox,broadcast},logs/{agents,decisions,archive},config,prompts,artifacts/{releases,reports,metrics,backups},scripts}
 
-if [ -d ".loki/state/agents" ] && [ -d ".loki/queue" ] && [ -d ".loki/logs" ]; then
+if [ -d ".elite/state/agents" ] && [ -d ".elite/queue" ] && [ -d ".elite/logs" ]; then
     log_pass "All directories created"
 else
     log_fail "Missing directories"
@@ -46,12 +46,12 @@ fi
 # Test 2: Queue files initialization
 log_test "Queue files initialization"
 for f in pending in-progress completed failed dead-letter; do
-    echo '{"tasks":[]}' > ".loki/queue/$f.json"
+    echo '{"tasks":[]}' > ".elite/queue/$f.json"
 done
 
 all_queues_exist=true
 for f in pending in-progress completed failed dead-letter; do
-    if [ ! -f ".loki/queue/$f.json" ]; then
+    if [ ! -f ".elite/queue/$f.json" ]; then
         all_queues_exist=false
     fi
 done
@@ -64,7 +64,7 @@ fi
 
 # Test 3: Orchestrator state initialization
 log_test "Orchestrator state initialization"
-cat > .loki/state/orchestrator.json << 'EOF'
+cat > .elite/state/orchestrator.json << 'EOF'
 {
   "version": "2.1.0",
   "startupId": "",
@@ -80,8 +80,8 @@ cat > .loki/state/orchestrator.json << 'EOF'
 }
 EOF
 
-if [ -f ".loki/state/orchestrator.json" ]; then
-    version=$(cat .loki/state/orchestrator.json | grep -o '"version": "[^"]*"' | cut -d'"' -f4)
+if [ -f ".elite/state/orchestrator.json" ]; then
+    version=$(cat .elite/state/orchestrator.json | grep -o '"version": "[^"]*"' | cut -d'"' -f4)
     if [ "$version" = "2.1.0" ]; then
         log_pass "Orchestrator state created with correct version"
     else
@@ -130,7 +130,7 @@ fi
 # Test 6: JSON validation
 log_test "JSON validation of queue files"
 json_valid=true
-for f in .loki/queue/*.json; do
+for f in .elite/queue/*.json; do
     if ! python3 -c "import json; json.load(open('$f'))" 2>/dev/null; then
         if ! node -e "require('$f')" 2>/dev/null; then
             json_valid=false
@@ -144,8 +144,8 @@ fi
 
 # Test 7: File locking mechanism
 log_test "File locking mechanism"
-mkdir -p .loki/state/locks
-LOCK_FILE=".loki/state/locks/test.lock"
+mkdir -p .elite/state/locks
+LOCK_FILE=".elite/state/locks/test.lock"
 
 # Test acquiring lock
 (
@@ -167,11 +167,11 @@ fi
 
 # Test 8: Backup directory structure
 log_test "Backup directory structure"
-mkdir -p .loki/artifacts/backups
+mkdir -p .elite/artifacts/backups
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-BACKUP_PATH=".loki/artifacts/backups/state-$TIMESTAMP"
+BACKUP_PATH=".elite/artifacts/backups/state-$TIMESTAMP"
 mkdir -p "$BACKUP_PATH"
-cp .loki/state/orchestrator.json "$BACKUP_PATH/"
+cp .elite/state/orchestrator.json "$BACKUP_PATH/"
 
 if [ -f "$BACKUP_PATH/orchestrator.json" ]; then
     log_pass "Backup structure works"

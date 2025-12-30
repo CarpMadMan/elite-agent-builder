@@ -1,4 +1,4 @@
-# PRD Coach - Complete Usage Guide
+# ARD Coach - Complete Usage Guide
 
 ## Table of Contents
 
@@ -15,11 +15,11 @@
 
 ## Overview
 
-**PRD Coach** is an interactive skill that helps you transform rough ideas into complete, well-structured ARD (Agent Requirements Document) files ready for ELITE execution.
+**ARD Coach** is an interactive skill that helps you transform rough ideas into complete, well-structured ARD (Agent Requirements Document) files ready for ELITE execution.
 
-### Why Use PRD Coach?
+### Why Use ARD Coach?
 
-| Without PRD Coach | With PRD Coach |
+| Without ARD Coach | With ARD Coach |
 |-------------------|----------------|
 | Need to learn ARD format | Guided conversational questions |
 | Unsure what to include | Targeted questions for each section |
@@ -45,19 +45,19 @@
 2. ELITE framework available
 3. Basic understanding of what you want to build
 
-### Install PRD Coach
+### Install ARD Coach
 
 ```bash
 # Navigate to ELITE directory
 cd /path/to/elite-agent-builder
 
-# Create symlink for PRD Coach
-mkdir -p ~/.claude/skills/prd-coach
-ln -s "$(pwd)/skills/prd-coach/SKILL.md" ~/.claude/skills/prd-coach/
+# Create symlink for ARD Coach
+mkdir -p ~/.claude/skills/ard-coach
+ln -s "$(pwd)/skills/ard-coach/SKILL.md" ~/.claude/skills/ard-coach/
 
 # Verify installation
-cat ~/.claude/skills/prd-coach/SKILL.md | head -5
-# Should show: name: prd-coach
+cat ~/.claude/skills/ard-coach/SKILL.md | head -5
+# Should show: name: ard-coach
 ```
 
 ### Verify Installation
@@ -67,7 +67,7 @@ cat ~/.claude/skills/prd-coach/SKILL.md | head -5
 claude --dangerously-skip-permissions
 
 # Test trigger
-> PRD Coach
+> ARD Coach
 
 # Should respond with welcome message
 ```
@@ -82,10 +82,10 @@ claude --dangerously-skip-permissions
 claude --dangerously-skip-permissions
 ```
 
-### Step 2: Trigger PRD Coach
+### Step 2: Trigger ARD Coach
 
 Say any of these phrases:
-- "PRD Coach"
+- "ARD Coach"
 - "Help me write a PRD"
 - "Help me write requirements"
 - "Help me write an ARD"
@@ -93,7 +93,7 @@ Say any of these phrases:
 ### Step 3: Select Mode
 
 ```
-Welcome to PRD Coach! Which mode would you prefer?
+Welcome to ARD Coach! Which mode would you prefer?
 
 1. Quick mode: 5-7 core questions (for experienced users)
 2. Deep dive: 15-20 comprehensive questions
@@ -103,11 +103,11 @@ Type your choice and continue.
 
 ### Step 4: Answer Questions
 
-PRD Coach will ask questions about your agent system. Answer in your own words - PRD Coach will interpret and format your responses.
+ARD Coach will ask questions about your agent system. Answer in your own words - ARD Coach will interpret and format your responses.
 
 ### Step 5: Review ARD
 
-After answering all questions, PRD Coach will generate and display your complete ARD.
+After answering all questions, ARD Coach will generate and display your complete ARD.
 
 ### Step 6: Approve or Refine
 
@@ -171,9 +171,9 @@ Choose:
 ### Example 1: Quick Mode - GitHub Issue Monitor
 
 ```
-You: PRD Coach
+You: ARD Coach
 
-Coach: Welcome to PRD Coach! Which mode would you prefer?
+Coach: Welcome to ARD Coach! Which mode would you prefer?
        1. Quick mode: 5-7 core questions
        2. Deep dive: 15-20 comprehensive questions
 
@@ -237,10 +237,10 @@ Coach: What would you like to do?
 You: Approve
 
 Coach: Your ARD is ready! It has been saved to:
-       .elite/prd-coach-ard.md
+       .elite/ard-coach-ard.md
 
        To execute ELITE with your ARD, run:
-       ./autonomy/run.sh .elite/prd-coach-ard.md
+       ./autonomy/run.sh .elite/ard-coach-ard.md
 
        Would you like me to execute ELITE now? [yes/no]
 
@@ -252,9 +252,9 @@ Coach: [Executes ELITE autonomously...]
 ### Example 2: Deep Dive Mode - Code Review System
 
 ```
-You: PRD Coach
+You: ARD Coach
 
-Coach: Welcome to PRD Coach! Which mode would you prefer?
+Coach: Welcome to ARD Coach! Which mode would you prefer?
 
 You: Deep dive - I need to plan a comprehensive system
 
@@ -309,19 +309,19 @@ Coach: Your ARD is ready! Would you like me to execute ELITE now?
 
 You: Save for later
 
-Coach: No problem! Your ARD is saved at .elite/prd-coach-ard.md
+Coach: No problem! Your ARD is saved at .elite/ard-coach-ard.md
 
        You can execute ELITE manually anytime by running:
-       ./autonomy/run.sh .elite/prd-coach-ard.md
+       ./autonomy/run.sh .elite/ard-coach-ard.md
 
-       Thanks for using PRD Coach!
+       Thanks for using ARD Coach!
 ```
 
 ---
 
 ## ARD Format Reference
 
-PRD Coach generates ARDs following this structure:
+ARD Coach generates ARDs following this structure:
 
 ```markdown
 # Project Name - Agent Requirements Document
@@ -371,7 +371,7 @@ Description and interaction flow
 
 ## Tips & Best Practices
 
-### Before Starting PRD Coach
+### Before Starting ARD Coach
 
 1. **Have a rough idea** - You don't need a full spec, but know what problem you're solving
 2. **Know your constraints** - Tech stack preferences, deadlines, resources
@@ -380,8 +380,8 @@ Description and interaction flow
 ### During the Session
 
 1. **Be specific** - Detailed answers lead to better ARDs
-2. **Use examples** - Concrete scenarios help PRD Coach understand your needs
-3. **Ask questions** - If you're unsure about agent patterns or options, ask PRD Coach to explain
+2. **Use examples** - Concrete scenarios help ARD Coach understand your needs
+3. **Ask questions** - If you're unsure about agent patterns or options, ask ARD Coach to explain
 4. **Think edges** - Consider error cases, unusual inputs, constraints
 5. **Iterate** - Use the review phase to refine and improve
 
@@ -398,7 +398,7 @@ Description and interaction flow
 ### Getting Better Results
 
 1. **Start with Quick mode** - Get a baseline ARD quickly
-2. **Switch to Deep dive** - If you need more detail, PRD Coach keeps your answers
+2. **Switch to Deep dive** - If you need more detail, ARD Coach keeps your answers
 3. **Edit sections** - Refine specific parts without starting over
 4. **Save multiple versions** - "Save for later" lets you iterate separately
 
@@ -406,22 +406,22 @@ Description and interaction flow
 
 ## Troubleshooting
 
-### PRD Coach Won't Trigger
+### ARD Coach Won't Trigger
 
-**Problem:** Saying "PRD Coach" doesn't activate the skill
+**Problem:** Saying "ARD Coach" doesn't activate the skill
 
 **Solutions:**
 ```bash
 # Check skill is installed
-ls ~/.claude/skills/prd-coach/SKILL.md
+ls ~/.claude/skills/ard-coach/SKILL.md
 
 # If missing, reinstall:
-mkdir -p ~/.claude/skills/prd-coach
-ln -s "$(pwd)/skills/prd-coach/SKILL.md" ~/.claude/skills/prd-coach/
+mkdir -p ~/.claude/skills/ard-coach
+ln -s "$(pwd)/skills/ard-coach/SKILL.md" ~/.claude/skills/ard-coach/
 
 # Verify YAML frontmatter
-head -5 ~/.claude/skills/prd-coach/SKILL.md
-# Should show: name: prd-coach
+head -5 ~/.claude/skills/ard-coach/SKILL.md
+# Should show: name: ard-coach
 ```
 
 ### Generated ARD Looks Wrong
@@ -440,7 +440,7 @@ head -5 ~/.claude/skills/prd-coach/SKILL.md
 - Choose **Quick mode** if: You've built agents before, project is straightforward
 - Choose **Deep dive** if: New to agents, complex system, team project
 
-**Tip:** You can switch modes anytime - PRD Coach keeps your answers!
+**Tip:** You can switch modes anytime - ARD Coach keeps your answers!
 
 ### ELITE Execution Fails
 
@@ -452,17 +452,17 @@ head -5 ~/.claude/skills/prd-coach/SKILL.md
 ./autonomy/run.sh --help
 
 # Verify ARD file exists
-cat .elite/prd-coach-ard.md
+cat .elite/ard-coach-ard.md
 
 # Run ELITE manually
-./autonomy/run.sh .elite/prd-coach-ard.md
+./autonomy/run.sh .elite/ard-coach-ard.md
 ```
 
 ---
 
 ## Next Steps
 
-After PRD Coach generates your ARD:
+After ARD Coach generates your ARD:
 
 1. **Review the ARD** - Read through all sections
 2. **Edit if needed** - Use "Edit section" to refine

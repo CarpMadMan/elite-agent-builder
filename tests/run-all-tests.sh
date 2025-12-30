@@ -1,6 +1,6 @@
 #!/bin/bash
-# Loki Mode Test Suite Runner
-# Runs all test cases for the Loki Mode skill
+# ELITE Test Suite Runner
+# Runs all test cases for the ELITE skill
 
 set -euo pipefail
 

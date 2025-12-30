@@ -1,10 +1,10 @@
 # Agent Definitions
 
-Complete specifications for all 37 agent types in the Loki Mode multi-agent system.
+Complete specifications for all 21 agent types in the Agent Mode multi-agent system for building Claude Code agent systems.
 
 ## Agent Role Prompt Template
 
-Each agent receives a role prompt stored in `.loki/prompts/{agent-type}.md`:
+Each agent receives a role prompt stored in `.elite/prompts/{agent-type}.md`:
 
 ```markdown
 # Agent Identity
@@ -22,956 +22,544 @@ You are **{AGENT_TYPE}** agent with ID **{AGENT_ID}**.
 - Log all decisions with reasoning
 
 ## Task Execution Loop
-1. Read `.loki/queue/pending.json`
+1. Read `.elite/queue/pending.json`
 2. Find task where `type` matches your capabilities
 3. Acquire task lock (atomic claim)
 4. Execute task following your capability guidelines
-5. Write result to `.loki/messages/outbox/{AGENT_ID}/`
-6. Update `.loki/state/agents/{AGENT_ID}.json`
+5. Write result to `.elite/messages/outbox/{AGENT_ID}/`
+6. Update `.elite/state/agents/{AGENT_ID}.json`
 7. Mark task complete or failed
 8. Return to step 1
 
 ## Communication
-- Inbox: `.loki/messages/inbox/{AGENT_ID}/`
-- Outbox: `.loki/messages/outbox/{AGENT_ID}/`
-- Broadcasts: `.loki/messages/broadcast/`
+- Inbox: `.elite/messages/inbox/{AGENT_ID}/`
+- Outbox: `.elite/messages/outbox/{AGENT_ID}/`
+- Broadcasts: `.elite/messages/broadcast/`
 
 ## State File
-Location: `.loki/state/agents/{AGENT_ID}.json`
+Location: `.elite/state/agents/{AGENT_ID}.json`
 Update after every task completion.
 ```
 
 ---
 
-## Engineering Swarm (8 Agents)
+## Architecture Swarm (4 Agents)
 
-### eng-frontend
+### arch-mcp
 **Capabilities:**
-- React, Vue, Svelte, Next.js, Nuxt, SvelteKit
-- TypeScript, JavaScript
-- Tailwind, CSS Modules, styled-components
-- Responsive design, mobile-first
-- Accessibility (WCAG 2.1 AA)
-- Performance optimization (Core Web Vitals)
+- MCP protocol specification (Model Context Protocol)
+- Tool definition and JSON schema design
+- Resource modeling (MCP resources)
+- Prompt template design (MCP prompts)
+- Transport layer selection (stdio, SSE)
+- Server capability planning
 
 **Task Types:**
-- `ui-component`: Build UI component
-- `page-layout`: Create page layout
-- `styling`: Implement designs
-- `accessibility-fix`: Fix a11y issues
-- `frontend-perf`: Optimize bundle, lazy loading
+- `mcp-spec-design`: Design MCP server interface
+- `tool-definition`: Define tool schemas and interfaces
+- `resource-modeling`: Design MCP resource structure
+- `transport-selection`: Choose stdio vs SSE transport
+- `mcp-capability-planning`: Plan server capabilities
 
 **Quality Checks:**
-- Lighthouse score > 90
-- No console errors
-- Cross-browser testing (Chrome, Firefox, Safari)
-- Mobile responsive verification
+- Tool schemas follow MCP JSON Schema spec
+- All tools have descriptions and input schemas
+- Transport choice matches deployment requirements
+- Resources properly modeled with URIs
+- Server capabilities are realistic and implementable
 
 ---
 
-### eng-backend
+### arch-sdk-agent
 **Capabilities:**
-- Node.js, Python, Go, Rust, Java
-- REST API, GraphQL, gRPC
-- Authentication (OAuth, JWT, sessions)
-- Authorization (RBAC, ABAC)
-- Caching (Redis, Memcached)
-- Message queues (RabbitMQ, SQS, Kafka)
+- Claude Agent SDK patterns and best practices
+- Agent architecture design (autonomous loop, request-response, event-driven)
+- Decision flow design
+- Tool calling patterns
+- State management strategies
+- Subagent coordination patterns
 
 **Task Types:**
-- `api-endpoint`: Implement API endpoint
-- `service`: Build microservice
-- `integration`: Third-party API integration
-- `auth`: Authentication/authorization
-- `business-logic`: Core business rules
+- `agent-architecture`: Design agent architecture
+- `decision-flow`: Design decision-making flow
+- `tool-composition`: Design tool composition strategy
+- `state-strategy`: Design state management approach
+- `subagent-pattern`: Design subagent coordination
 
 **Quality Checks:**
-- API response < 100ms p99
-- Input validation on all endpoints
-- Error handling with proper status codes
-- Rate limiting implemented
+- Agent pattern matches use case (autonomous vs request-response)
+- Decision flows are clear and testable
+- Tool calling follows SDK best practices
+- State management is appropriate for scale
+- Subagent coordination is well-defined
 
 ---
 
-### eng-database
+### arch-hook
 **Capabilities:**
-- PostgreSQL, MySQL, MongoDB, Redis
-- Schema design, normalization
-- Migrations (Prisma, Drizzle, Knex, Alembic)
-- Query optimization, indexing
-- Replication, sharding strategies
-- Backup and recovery
+- Claude Code hook lifecycle (pre-tool, post-tool, session-start, etc.)
+- Hook script design (bash, python)
+- Hook context and parameters
+- Hook error handling
+- Hook ordering and dependencies
+- Hook testing strategies
 
 **Task Types:**
-- `schema-design`: Design database schema
-- `migration`: Create migration
-- `query-optimize`: Optimize slow queries
-- `index`: Add/optimize indexes
-- `data-seed`: Create seed data
+- `hook-design`: Design hook implementation
+- `hook-lifecycle`: Design hook lifecycle integration
+- `hook-context`: Design hook context handling
+- `hook-dependencies`: Design hook dependencies
 
 **Quality Checks:**
-- No N+1 queries
-- All queries use indexes (EXPLAIN ANALYZE)
-- Migrations are reversible
-- Foreign keys enforced
+- Hook placement is appropriate for use case
+- Hook has access to required context
+- Error handling is robust
+- Hook can be tested independently
+- Hook follows Claude Code hook conventions
 
 ---
 
-### eng-mobile
+### arch-skill
 **Capabilities:**
-- React Native, Flutter, Swift, Kotlin
-- Cross-platform strategies
-- Native modules, platform-specific code
-- Push notifications
-- Offline-first, local storage
-- App store deployment
+- Skill design and structure
+- Progressive disclosure patterns
+- Skill portability (Code, Apps, API)
+- Skill documentation format
+- Skill naming and description
+- Skill best practices
 
 **Task Types:**
-- `mobile-screen`: Implement screen
-- `native-feature`: Camera, GPS, biometrics
-- `offline-sync`: Offline data handling
-- `push-notification`: Notification system
-- `app-store`: Prepare store submission
+- `skill-design`: Design skill structure
+- `skill-documentation`: Design skill docs
+- `skill-portability`: Ensure skill portability
+- `skill-metadata`: Design skill metadata
 
 **Quality Checks:**
-- 60fps smooth scrolling
-- App size < 50MB
-- Cold start < 3s
-- Memory efficient
+- Skill has clear name and description
+- Progressive disclosure is followed
+- Skill works across Claude platforms
+- Documentation is complete and accurate
+- Skill follows best practices
 
 ---
 
-### eng-api
+## Implementation Swarm (6 Agents)
+
+### impl-mcp
 **Capabilities:**
-- OpenAPI/Swagger specification
-- API versioning strategies
-- SDK generation
-- Rate limiting design
-- Webhook systems
+- TypeScript MCP server implementation
+- @modelcontextprotocol/sdk usage
+- Tool implementation (request handlers)
+- Resource implementation
+- Prompt implementation
+- Server lifecycle management
+- Error handling and logging
+
+**Task Types:**
+- `mcp-server-implement`: Implement MCP server
+- `tool-implement`: Implement tool handler
+- `resource-implement`: Implement resource handler
+- `mcp-error-handling`: Add error handling
+- `mcp-testing`: Write MCP server tests
+
+**Quality Checks:**
+- Server responds to tools/list within 5 seconds
+- All tool schemas are valid
+- Error responses follow MCP spec
+- Server handles edge cases gracefully
+- TypeScript compiles without errors
+
+---
+
+### impl-sdk-agent
+**Capabilities:**
+- Claude Agent SDK implementation
+- Agent initialization and configuration
+- Tool calling implementation
+- Streaming responses
+- Decision loop implementation
+- Agent state management
+- Error handling and retries
+
+**Task Types:**
+- `agent-implement`: Implement agent code
+- `decision-loop`: Implement decision loop
+- `tool-calling`: Implement tool calling logic
+- `agent-state`: Implement state management
+- `agent-error-handling`: Add error handling
+
+**Quality Checks:**
+- Agent initializes correctly
+- Decision loop terminates appropriately
+- Tool calling follows SDK patterns
+- State management is thread-safe
+- Agent recovers from errors
+
+---
+
+### impl-hook
+**Capabilities:**
+- Bash script hook implementation
+- Python script hook implementation
+- Hook argument parsing
+- Context extraction
+- Hook output formatting
+- Hook exit code handling
+- Hook debugging
+
+**Task Types:**
+- `hook-implement`: Implement hook script
+- `hook-arguments`: Handle hook arguments
+- `hook-context`: Extract and use context
+- `hook-output`: Format hook output
+
+**Quality Checks:**
+- Hook executes without errors
+- Exit codes are meaningful
+- Output is properly formatted
+- Hook handles missing context gracefully
+- Hook can be tested independently
+
+---
+
+### impl-skill
+**Capabilities:**
+- SKILL.md markdown writing
+- Code embedding in skills
+- Skill documentation writing
+- Skill examples creation
+- Skill testing instructions
+- Skill metadata formatting
+
+**Task Types:**
+- `skill-implement`: Write SKILL.md
+- `skill-code`: Embed code in skill
+- `skill-examples`: Create usage examples
+- `skill-testing`: Add testing instructions
+
+**Quality Checks:**
+- SKILL.md has proper frontmatter
+- Description is clear and concise
+- Examples are accurate
+- Skill can be loaded in Claude Code
+- Metadata is complete
+
+---
+
+### impl-tool-composer
+**Capabilities:**
+- Multi-tool composition
+- Tool dependency management
+- Tool chaining patterns
+- Parallel tool execution
+- Tool result aggregation
+- Tool orchestration
+
+**Task Types:**
+- `tool-compose`: Compose multiple tools
+- `tool-chain`: Design tool chains
+- `tool-parallel`: Design parallel execution
+- `tool-aggregate`: Aggregate tool results
+
+**Quality Checks:**
+- Tools work together correctly
+- Dependencies are resolved
+- Parallel execution is safe
+- Results are aggregated correctly
+- Error handling is comprehensive
+
+---
+
+### impl-workflow-orchestrator
+**Capabilities:**
+- Multi-agent workflow design
+- Agent coordination patterns
+- Workflow state management
+- Workflow error handling
+- Workflow monitoring
+- Workflow recovery
+
+**Task Types:**
+- `workflow-design`: Design multi-agent workflow
+- `workflow-coordinate`: Implement agent coordination
+- `workflow-state`: Implement workflow state
+- `workflow-monitor`: Add workflow monitoring
+
+**Quality Checks:**
+- Workflow achieves stated goals
+- Agents coordinate correctly
+- State management is robust
+- Monitoring provides visibility
+- Workflow recovers from failures
+
+---
+
+## Integration Swarm (4 Agents)
+
+### integ-agent-coordinator
+**Capabilities:**
+- Multi-agent system integration
+- Agent communication setup
+- Shared state management
+- Agent lifecycle management
+- Agent scaling
+- Agent health monitoring
+
+**Task Types:**
+- `agent-integrate`: Integrate multiple agents
+- `agent-communication`: Set up communication
+- `shared-state`: Set up shared state
+- `agent-lifecycle`: Manage agent lifecycle
+
+**Quality Checks:**
+- Agents communicate correctly
+- Shared state is consistent
+- Lifecycle management works
+- Scaling is graceful
+- Health monitoring detects issues
+
+---
+
+### integ-mcp-integrator
+**Capabilities:**
+- MCP server integration with agents
+- MCP client configuration
+- MCP server discovery
+- MCP connection management
+- MCP error handling
+- MCP testing
+
+**Task Types:**
+- `mcp-integrate`: Integrate MCP server
+- `mcp-client-configure`: Configure MCP client
+- `mcp-discovery`: Set up server discovery
+- `mcp-connection`: Manage connections
+
+**Quality Checks:**
+- MCP server connects correctly
+- Client can call tools
+- Discovery works as expected
+- Connections recover from failures
+- Integration tests pass
+
+---
+
+### integ-skill-publisher
+**Capabilities:**
+- Skill packaging and publishing
+- Skill marketplace submission
+- Skill versioning
+- Skill distribution
+- Skill installation verification
+- Skill update management
+
+**Task Types:**
+- `skill-package`: Package skill for distribution
+- `skill-publish`: Publish to marketplace
+- `skill-version`: Manage skill versions
+- `skill-distribute`: Distribute skill
+
+**Quality Checks:**
+- Skill installs correctly
+- Version is incremented properly
+- Distribution reaches users
+- Updates are seamless
+- Marketplace listing is accurate
+
+---
+
+### integ-hook-lifecycle
+**Capabilities:**
+- Hook lifecycle management
+- Hook installation
+- Hook activation
+- Hook deactivation
+- Hook uninstallation
+- Hook updates
+
+**Task Types:**
+- `hook-install`: Install hook
+- `hook-activate`: Activate hook
+- `hook-deactivate`: Deactivate hook
+- `hook-uninstall`: Uninstall hook
+- `hook-update`: Update hook
+
+**Quality Checks:**
+- Hooks install correctly
+- Activation triggers hooks
+- Deactivation prevents execution
+- Uninstallation removes cleanly
+- Updates preserve configuration
+
+---
+
+## Testing Swarm (4 Agents)
+
+### test-conversation
+**Capabilities:**
+- Conversation flow testing
+- Agent interaction testing
+- Multi-turn conversation validation
+- Goal achievement testing
+- Conversation logging
+- Conversation regression testing
+
+**Task Types:**
+- `conversation-test`: Test conversation flows
+- `goal-validation`: Validate goal achievement
+- `conversation-log`: Log conversations
+- `conversation-regression`: Test for regressions
+
+**Quality Checks:**
+- Conversations reach goal state
+- Agent responses are appropriate
+- Multi-turn flows work correctly
+- Goals are achieved efficiently
+- Regressions are detected
+
+---
+
+### test-tool-invocation
+**Capabilities:**
+- Tool invocation testing
+- Tool parameter validation
+- Tool result validation
+- Tool error testing
+- Tool performance testing
+- Tool integration testing
+
+**Task Types:**
+- `tool-test`: Test tool invocations
+- `tool-param-validate`: Validate tool parameters
+- `tool-result-validate`: Validate tool results
+- `tool-error-test`: Test tool error handling
+
+**Quality Checks:**
+- Tools invoke correctly
+- Parameters validate properly
+- Results are valid
+- Errors are handled correctly
+- Performance meets requirements
+
+---
+
+### test-mcp-compliance
+**Capabilities:**
+- MCP protocol compliance testing
+- MCP spec validation
+- MCP server testing
+- MCP schema validation
+- MCP transport testing
+- MCP interoperability testing
+
+**Task Types:**
+- `mcp-compliance-test`: Test MCP compliance
+- `mcp-spec-validate`: Validate against spec
+- `mcp-schema-test`: Test schema validity
+- `mcp-transport-test`: Test transport layer
+
+**Quality Checks:**
+- Server follows MCP spec
+- Schemas are valid
+- Transport works correctly
+- Interoperability is maintained
+- Compliance is 100%
+
+---
+
+### test-integration
+**Capabilities:**
+- End-to-end integration testing
+- Multi-component testing
+- System testing
+- Acceptance testing
+- Performance testing
+- Stress testing
+
+**Task Types:**
+- `integration-test`: Run integration tests
+- `system-test`: Test complete system
+- `acceptance-test`: Run acceptance tests
+- `performance-test`: Test performance
+
+**Quality Checks:**
+- All components integrate correctly
+- System meets requirements
+- Acceptance criteria are met
+- Performance meets targets
+- Stress tests reveal limits
+
+---
+
+## Documentation Swarm (3 Agents)
+
+### doc-sdk
+**Capabilities:**
+- Agent SDK documentation
+- Code documentation
 - API documentation
-
-**Task Types:**
-- `api-spec`: Write OpenAPI spec
-- `sdk-generate`: Generate client SDKs
-- `webhook`: Implement webhook system
-- `api-docs`: Generate documentation
-- `versioning`: Implement API versioning
-
-**Quality Checks:**
-- 100% endpoint documentation
-- All errors have consistent format
-- SDK tests pass
-- Postman collection updated
-
----
-
-### eng-qa
-**Capabilities:**
-- Unit testing (Jest, pytest, Go test)
-- Integration testing
-- E2E testing (Playwright, Cypress)
-- Load testing (k6, Artillery)
-- Fuzz testing
-- Test automation
-
-**Task Types:**
-- `unit-test`: Write unit tests
-- `integration-test`: Write integration tests
-- `e2e-test`: Write E2E tests
-- `load-test`: Performance/load testing
-- `test-coverage`: Increase coverage
-
-**Quality Checks:**
-- Coverage > 80%
-- All critical paths tested
-- No flaky tests
-- CI passes consistently
-
----
-
-### eng-perf
-**Capabilities:**
-- Application profiling (CPU, memory, I/O)
-- Performance benchmarking
-- Bottleneck identification
-- Caching strategy (Redis, CDN, in-memory)
-- Database query optimization
-- Bundle size optimization
-- Core Web Vitals optimization
-
-**Task Types:**
-- `profile`: Profile application performance
-- `benchmark`: Create performance benchmarks
-- `optimize`: Optimize identified bottleneck
-- `cache-strategy`: Design/implement caching
-- `bundle-optimize`: Reduce bundle/binary size
-
-**Quality Checks:**
-- p99 latency < target
-- Memory usage stable (no leaks)
-- Benchmarks documented and reproducible
-- Before/after metrics recorded
-
----
-
-### eng-infra
-**Capabilities:**
-- Dockerfile creation and optimization
-- Kubernetes manifest review
-- Helm chart development
-- Infrastructure as Code review
-- Container security
-- Multi-stage builds
-- Resource limits and requests
-
-**Task Types:**
-- `dockerfile`: Create/optimize Dockerfile
-- `k8s-manifest`: Write K8s manifests
-- `helm-chart`: Develop Helm charts
-- `iac-review`: Review Terraform/Pulumi code
-- `container-security`: Harden containers
-
-**Quality Checks:**
-- Images use minimal base
-- No secrets in images
-- Resource limits set
-- Health checks defined
-
----
-
-## Operations Swarm (8 Agents)
-
-### ops-devops
-**Capabilities:**
-- CI/CD (GitHub Actions, GitLab CI, Jenkins)
-- Infrastructure as Code (Terraform, Pulumi, CDK)
-- Container orchestration (Docker, Kubernetes)
-- Cloud platforms (AWS, GCP, Azure)
-- GitOps (ArgoCD, Flux)
-
-**Task Types:**
-- `ci-pipeline`: Set up CI pipeline
-- `cd-pipeline`: Set up CD pipeline
-- `infrastructure`: Provision infrastructure
-- `container`: Dockerize application
-- `k8s`: Kubernetes manifests/Helm charts
-
-**Quality Checks:**
-- Pipeline runs < 10min
-- Zero-downtime deployments
-- Infrastructure is reproducible
-- Secrets properly managed
-
----
-
-### ops-security
-**Capabilities:**
-- SAST (static analysis)
-- DAST (dynamic analysis)
-- Dependency scanning
-- Container scanning
-- Penetration testing
-- Compliance (SOC2, GDPR, HIPAA)
-
-**Task Types:**
-- `security-scan`: Run security scans
-- `vulnerability-fix`: Fix vulnerabilities
-- `penetration-test`: Conduct pen test
-- `compliance-check`: Verify compliance
-- `security-policy`: Implement security policies
-
-**Quality Checks:**
-- Zero high/critical vulnerabilities
-- All secrets in vault
-- HTTPS everywhere
-- Input sanitization verified
-
----
-
-### ops-monitor
-**Capabilities:**
-- Observability (Datadog, New Relic, Grafana)
-- Logging (ELK, Loki)
-- Tracing (Jaeger, Zipkin)
-- Alerting rules
-- SLO/SLI definition
-- Dashboards
-
-**Task Types:**
-- `monitoring-setup`: Set up monitoring
-- `dashboard`: Create dashboard
-- `alert-rule`: Define alert rules
-- `log-pipeline`: Configure logging
-- `tracing`: Implement distributed tracing
-
-**Quality Checks:**
-- All services have health checks
-- Critical paths have alerts
-- Logs are structured JSON
-- Traces cover full request lifecycle
-
----
-
-### ops-incident
-**Capabilities:**
-- Incident detection
-- Runbook creation
-- Auto-remediation scripts
-- Root cause analysis
-- Post-mortem documentation
-- On-call management
-
-**Task Types:**
-- `runbook`: Create runbook
-- `auto-remediation`: Script auto-fix
-- `incident-response`: Handle incident
-- `rca`: Root cause analysis
-- `postmortem`: Write postmortem
-
-**Quality Checks:**
-- MTTR < 30min for P1
-- All incidents have RCA
-- Runbooks are tested
-- Auto-remediation success > 80%
-
----
-
-### ops-release
-**Capabilities:**
-- Semantic versioning
-- Changelog generation
-- Release notes
-- Feature flags
-- Blue-green deployments
-- Canary releases
-- Rollback procedures
-
-**Task Types:**
-- `version-bump`: Version release
-- `changelog`: Generate changelog
-- `feature-flag`: Implement feature flag
-- `canary`: Canary deployment
-- `rollback`: Execute rollback
-
-**Quality Checks:**
-- All releases tagged
-- Changelog accurate
-- Rollback tested
-- Feature flags documented
-
----
-
-### ops-cost
-**Capabilities:**
-- Cloud cost analysis
-- Resource right-sizing
-- Reserved instance planning
-- Spot instance strategies
-- Cost allocation tags
-- Budget alerts
-
-**Task Types:**
-- `cost-analysis`: Analyze spending
-- `right-size`: Optimize resources
-- `spot-strategy`: Implement spot instances
-- `budget-alert`: Set up alerts
-- `cost-report`: Generate cost report
-
-**Quality Checks:**
-- Monthly cost within budget
-- No unused resources
-- All resources tagged
-- Cost per user tracked
-
----
-
-### ops-sre
-**Capabilities:**
-- Site Reliability Engineering
-- SLO/SLI/SLA definition
-- Error budgets
-- Capacity planning
-- Chaos engineering
-- Toil reduction
-- On-call procedures
-
-**Task Types:**
-- `slo-define`: Define SLOs and SLIs
-- `error-budget`: Track and manage error budgets
-- `capacity-plan`: Plan for scale
-- `chaos-test`: Run chaos experiments
-- `toil-reduce`: Automate manual processes
-
-**Quality Checks:**
-- SLOs documented and measured
-- Error budget not exhausted
-- Capacity headroom > 30%
-- Chaos tests pass
-
----
-
-### ops-compliance
-**Capabilities:**
-- SOC 2 Type II preparation
-- GDPR compliance
-- HIPAA compliance
-- PCI-DSS compliance
-- ISO 27001
-- Audit preparation
-- Policy documentation
-
-**Task Types:**
-- `compliance-assess`: Assess current compliance state
-- `policy-write`: Write security policies
-- `control-implement`: Implement required controls
-- `audit-prep`: Prepare for external audit
-- `evidence-collect`: Gather compliance evidence
-
-**Quality Checks:**
-- All required policies documented
-- Controls implemented and tested
-- Evidence organized and accessible
-- Audit findings addressed
-
----
-
-## Business Swarm (8 Agents)
-
-### biz-marketing
-**Capabilities:**
-- Landing page copy
-- SEO optimization
-- Content marketing
-- Email campaigns
-- Social media content
-- Analytics tracking
-
-**Task Types:**
-- `landing-page`: Create landing page
-- `seo`: Optimize for search
-- `blog-post`: Write blog post
-- `email-campaign`: Create email sequence
-- `social-content`: Social media posts
-
-**Quality Checks:**
-- Core Web Vitals pass
-- Meta tags complete
-- Analytics tracking verified
-- A/B tests running
-
----
-
-### biz-sales
-**Capabilities:**
-- CRM setup (HubSpot, Salesforce)
-- Sales pipeline design
-- Outreach templates
-- Demo scripts
-- Proposal generation
-- Contract management
-
-**Task Types:**
-- `crm-setup`: Configure CRM
-- `outreach`: Create outreach sequence
-- `demo-script`: Write demo script
-- `proposal`: Generate proposal
-- `pipeline`: Design sales pipeline
-
-**Quality Checks:**
-- CRM data clean
-- Follow-up automation working
-- Proposals branded correctly
-- Pipeline stages defined
-
----
-
-### biz-finance
-**Capabilities:**
-- Billing system setup (Stripe, Paddle)
-- Invoice generation
-- Revenue recognition
-- Runway calculation
-- Financial reporting
-- Pricing strategy
-
-**Task Types:**
-- `billing-setup`: Configure billing
-- `pricing`: Define pricing tiers
-- `invoice`: Generate invoices
-- `financial-report`: Create report
-- `runway`: Calculate runway
-
-**Quality Checks:**
-- PCI compliance
-- Invoices accurate
-- Metrics tracked (MRR, ARR, churn)
-- Runway > 6 months
-
----
-
-### biz-legal
-**Capabilities:**
-- Terms of Service
-- Privacy Policy
-- Cookie Policy
-- GDPR compliance
-- Contract templates
-- IP protection
-
-**Task Types:**
-- `tos`: Generate Terms of Service
-- `privacy-policy`: Create privacy policy
-- `gdpr`: Implement GDPR compliance
-- `contract`: Create contract template
-- `compliance`: Verify legal compliance
-
-**Quality Checks:**
-- All policies published
-- Cookie consent implemented
-- Data deletion capability
-- Contracts reviewed
-
----
-
-### biz-support
-**Capabilities:**
-- Help documentation
-- FAQ creation
-- Chatbot setup
-- Ticket system
-- Knowledge base
-- User onboarding
-
-**Task Types:**
-- `help-docs`: Write documentation
-- `faq`: Create FAQ
-- `chatbot`: Configure chatbot
-- `ticket-system`: Set up support
-- `onboarding`: Design user onboarding
-
-**Quality Checks:**
-- All features documented
-- FAQ covers common questions
-- Response time < 4h
-- Onboarding completion > 80%
-
----
-
-### biz-hr
-**Capabilities:**
-- Job description writing
-- Recruiting pipeline setup
-- Interview process design
-- Onboarding documentation
-- Culture documentation
-- Employee handbook
-- Performance review templates
-
-**Task Types:**
-- `job-post`: Write job description
-- `recruiting-setup`: Set up recruiting pipeline
-- `interview-design`: Design interview process
-- `onboarding-docs`: Create onboarding materials
-- `culture-docs`: Document company culture
-
-**Quality Checks:**
-- Job posts are inclusive and clear
-- Interview process documented
-- Onboarding covers all essentials
-- Policies are compliant
-
----
-
-### biz-investor
-**Capabilities:**
-- Pitch deck creation
-- Investor update emails
-- Data room preparation
-- Cap table management
-- Financial modeling
-- Due diligence preparation
-- Term sheet review
-
-**Task Types:**
-- `pitch-deck`: Create/update pitch deck
-- `investor-update`: Write monthly update
-- `data-room`: Prepare data room
-- `financial-model`: Build financial model
-- `dd-prep`: Prepare for due diligence
-
-**Quality Checks:**
-- Metrics accurate and sourced
-- Narrative compelling and clear
-- Data room organized
-- Financials reconciled
-
----
-
-### biz-partnerships
-**Capabilities:**
-- Partnership outreach
-- Integration partnerships
-- Co-marketing agreements
-- Channel partnerships
-- API partnership programs
-- Partner documentation
-- Revenue sharing models
-
-**Task Types:**
-- `partner-outreach`: Identify and reach partners
-- `integration-partner`: Technical integration partnership
-- `co-marketing`: Plan co-marketing campaign
-- `partner-docs`: Create partner documentation
-- `partner-program`: Design partner program
-
-**Quality Checks:**
-- Partners aligned with strategy
-- Agreements documented
-- Integration tested
-- ROI tracked
-
----
-
-## Data Swarm (3 Agents)
-
-### data-ml
-**Capabilities:**
-- Machine learning model development
-- MLOps and model deployment
-- Feature engineering
-- Model training and tuning
-- A/B testing for ML models
-- Model monitoring
-- LLM integration and prompting
-
-**Task Types:**
-- `model-train`: Train ML model
-- `model-deploy`: Deploy model to production
-- `feature-eng`: Engineer features
-- `model-monitor`: Set up model monitoring
-- `llm-integrate`: Integrate LLM capabilities
-
-**Quality Checks:**
-- Model performance meets threshold
-- Training reproducible
-- Model versioned
-- Monitoring alerts configured
-
----
-
-### data-eng
-**Capabilities:**
-- ETL pipeline development
-- Data warehousing (Snowflake, BigQuery, Redshift)
-- dbt transformations
-- Airflow/Dagster orchestration
-- Data quality checks
-- Schema design
-- Data governance
-
-**Task Types:**
-- `etl-pipeline`: Build ETL pipeline
-- `dbt-model`: Create dbt model
-- `data-quality`: Implement data quality checks
-- `warehouse-design`: Design warehouse schema
-- `pipeline-monitor`: Monitor data pipelines
-
-**Quality Checks:**
-- Pipelines idempotent
-- Data freshness SLA met
-- Quality checks passing
-- Documentation complete
-
----
-
-### data-analytics
-**Capabilities:**
-- Business intelligence
-- Dashboard creation (Metabase, Looker, Tableau)
-- SQL analysis
-- Metrics definition
-- Self-serve analytics
-- Data storytelling
-
-**Task Types:**
-- `dashboard`: Create analytics dashboard
-- `metrics-define`: Define business metrics
-- `analysis`: Perform ad-hoc analysis
-- `self-serve`: Set up self-serve analytics
-- `report`: Generate business report
-
-**Quality Checks:**
-- Metrics clearly defined
-- Dashboards performant
-- Data accurate
-- Insights actionable
-
----
-
-## Product Swarm (3 Agents)
-
-### prod-pm
-**Capabilities:**
-- Product requirements documentation
-- User story writing
-- Backlog grooming and prioritization
-- Roadmap planning
-- Feature specifications
-- Stakeholder communication
-- Competitive analysis
-
-**Task Types:**
-- `prd-write`: Write product requirements
-- `user-story`: Create user stories
-- `backlog-groom`: Groom and prioritize backlog
-- `roadmap`: Update product roadmap
-- `spec`: Write feature specification
-
-**Quality Checks:**
-- Requirements clear and testable
-- Acceptance criteria defined
-- Priorities justified
-- Stakeholders aligned
-
----
-
-### prod-design
-**Capabilities:**
-- Design system creation
-- UI/UX patterns
-- Figma prototyping
-- Accessibility design
-- User research synthesis
-- Design documentation
-- Component library
-
-**Task Types:**
-- `design-system`: Create/update design system
-- `prototype`: Create Figma prototype
-- `ux-pattern`: Define UX pattern
-- `accessibility`: Ensure accessible design
-- `component`: Design component
-
-**Quality Checks:**
-- Design system consistent
-- Prototypes tested
-- WCAG compliant
-- Components documented
-
----
-
-### prod-techwriter
-**Capabilities:**
-- API documentation
-- User guides and tutorials
-- Release notes
-- README files
 - Architecture documentation
-- Runbooks
-- Knowledge base articles
+- Usage guide writing
+- Tutorial creation
 
 **Task Types:**
-- `api-docs`: Write API documentation
-- `user-guide`: Create user guide
-- `release-notes`: Write release notes
-- `tutorial`: Create tutorial
-- `architecture-doc`: Document architecture
+- `sdk-document`: Document SDK usage
+- `code-document`: Document code
+- `api-document`: Document APIs
+- `architecture-document`: Document architecture
 
 **Quality Checks:**
-- Documentation accurate
-- Examples work
-- Searchable and organized
-- Up to date with code
+- Documentation is accurate
+- Examples work correctly
+- API docs are complete
+- Architecture is clear
+- Tutorials are followable
 
 ---
 
-## Review Swarm (3 Agents)
-
-### review-code
+### doc-mcp-schema
 **Capabilities:**
-- Code quality assessment
-- Design pattern recognition
-- SOLID principles verification
-- Code smell detection
-- Maintainability scoring
-- Duplication detection
-- Complexity analysis
+- MCP schema generation
+- JSON schema documentation
+- Tool schema documentation
+- Resource schema documentation
+- Schema validation documentation
 
 **Task Types:**
-- `review-code`: Full code review
-- `review-pr`: Pull request review
-- `review-refactor`: Review refactoring changes
-
-**Review Output Format:**
-```json
-{
-  "strengths": ["Well-structured modules", "Good test coverage"],
-  "issues": [
-    {
-      "severity": "Medium",
-      "description": "Function exceeds 50 lines",
-      "location": "src/auth.js:45",
-      "suggestion": "Extract validation logic to separate function"
-    }
-  ],
-  "assessment": "PASS|FAIL"
-}
-```
-
-**Model:** opus (required for deep analysis)
-
----
-
-### review-business
-**Capabilities:**
-- Requirements alignment verification
-- Business logic correctness
-- Edge case identification
-- User flow validation
-- Acceptance criteria checking
-- Domain model accuracy
-
-**Task Types:**
-- `review-business`: Business logic review
-- `review-requirements`: Requirements alignment check
-- `review-edge-cases`: Edge case analysis
-
-**Review Focus:**
-- Does implementation match PRD requirements?
-- Are all acceptance criteria met?
-- Are edge cases handled?
-- Is domain logic correct?
-
-**Model:** opus (required for requirements understanding)
-
----
-
-### review-security
-**Capabilities:**
-- Vulnerability detection
-- Authentication review
-- Authorization verification
-- Input validation checking
-- Secret exposure detection
-- Dependency vulnerability scanning
-- OWASP Top 10 checking
-
-**Task Types:**
-- `review-security`: Full security review
-- `review-auth`: Authentication/authorization review
-- `review-input`: Input validation review
-
-**Critical Issues (Always FAIL):**
-- Hardcoded secrets/credentials
-- SQL injection vulnerabilities
-- XSS vulnerabilities
-- Missing authentication
-- Broken access control
-- Sensitive data exposure
-
-**Model:** opus (required for security analysis)
-
----
-
-## Growth Swarm (4 Agents)
-
-### growth-hacker
-**Capabilities:**
-- Growth experiment design
-- Viral loop optimization
-- Referral program design
-- Activation optimization
-- Retention strategies
-- Churn prediction
-- PLG (Product-Led Growth) tactics
-
-**Task Types:**
-- `growth-experiment`: Design growth experiment
-- `viral-loop`: Optimize viral coefficient
-- `referral-program`: Design referral system
-- `activation`: Improve activation rate
-- `retention`: Implement retention tactics
+- `schema-generate`: Generate schemas
+- `schema-document`: Document schemas
+- `schema-validate`: Validate schemas
 
 **Quality Checks:**
-- Experiments statistically valid
-- Metrics tracked
-- Results documented
-- Winners implemented
+- Schemas are complete
+- Documentation is accurate
+- Validation works correctly
+- Schemas follow MCP spec
+- Examples are provided
 
 ---
 
-### growth-community
+### doc-usage-guide
 **Capabilities:**
-- Community building
-- Discord/Slack community management
-- User-generated content programs
-- Ambassador programs
-- Community events
-- Feedback collection
-- Community analytics
+- User guide writing
+- Getting started guides
+- Best practices documentation
+- Troubleshooting guides
+- FAQ creation
+- Video script writing
 
 **Task Types:**
-- `community-setup`: Set up community platform
-- `ambassador`: Create ambassador program
-- `event`: Plan community event
-- `ugc`: Launch UGC program
-- `feedback-loop`: Implement feedback collection
+- `usage-guide`: Write usage guides
+- `getting-started`: Write getting started
+- `best-practices`: Document best practices
+- `troubleshoot`: Write troubleshooting guides
 
 **Quality Checks:**
-- Community guidelines published
-- Engagement metrics tracked
-- Feedback actioned
-- Community health monitored
-
----
-
-### growth-success
-**Capabilities:**
-- Customer success workflows
-- Health scoring
-- Churn prevention
-- Expansion revenue
-- QBR (Quarterly Business Review)
-- Customer journey mapping
-- NPS and CSAT programs
-
-**Task Types:**
-- `health-score`: Implement health scoring
-- `churn-prevent`: Churn prevention workflow
-- `expansion`: Identify expansion opportunities
-- `qbr`: Prepare QBR materials
-- `nps`: Implement NPS program
-
-**Quality Checks:**
-- Health scores calibrated
-- At-risk accounts identified
-- NRR (Net Revenue Retention) tracked
-- Customer feedback actioned
-
----
-
-### growth-lifecycle
-**Capabilities:**
-- Email lifecycle marketing
-- In-app messaging
-- Push notification strategy
-- Behavioral triggers
-- Segmentation
-- Personalization
-- Re-engagement campaigns
-
-**Task Types:**
-- `lifecycle-email`: Create lifecycle email sequence
-- `in-app`: Implement in-app messaging
-- `push`: Design push notification strategy
-- `segment`: Create user segments
-- `re-engage`: Build re-engagement campaign
-
-**Quality Checks:**
-- Messages personalized
-- Triggers tested
-- Opt-out working
-- Performance tracked
+- Guides are clear and accurate
+- Getting started works
+- Best practices are sound
+- Troubleshooting solves issues
+- FAQ covers common questions
 
 ---
 
@@ -1033,9 +621,122 @@ Update after every task completion.
 {
   "from": "orchestrator",
   "type": "scale-request",
-  "agentType": "eng-backend",
+  "agentType": "impl-mcp",
   "count": 2,
   "reason": "queue-depth",
   "timestamp": "ISO"
 }
 ```
+
+---
+
+## Review Swarm (3 Agents - Reused from Web Dev)
+
+### review-code
+**Capabilities:**
+- Code quality assessment
+- Design pattern recognition
+- SOLID principles verification
+- Code smell detection
+- Maintainability scoring
+- Duplication detection
+- Complexity analysis
+
+**Task Types:**
+- `review-code`: Full code review
+- `review-pr`: Pull request review
+- `review-refactor`: Review refactoring changes
+
+**Review Output Format:**
+```json
+{
+  "strengths": ["Well-structured modules", "Good test coverage"],
+  "issues": [
+    {
+      "severity": "Medium",
+      "description": "Function exceeds 50 lines",
+      "location": "src/auth.js:45",
+      "suggestion": "Extract validation logic to separate function"
+    }
+  ],
+  "assessment": "PASS|FAIL"
+}
+```
+
+**Model:** opus (required for deep analysis)
+
+---
+
+### review-business
+**Capabilities:**
+- Requirements alignment verification
+- Business logic correctness
+- Edge case identification
+- User flow validation
+- Acceptance criteria checking
+- Domain model accuracy
+
+**Task Types:**
+- `review-business`: Business logic review
+- `review-requirements`: Requirements alignment check
+- `review-edge-cases`: Edge case analysis
+
+**Review Focus:**
+- Does implementation match requirements?
+- Are all acceptance criteria met?
+- Are edge cases handled?
+- Is domain logic correct?
+
+**Model:** opus (required for requirements understanding)
+
+---
+
+### review-security
+**Capabilities:**
+- Vulnerability detection
+- Authentication review
+- Authorization verification
+- Input validation checking
+- Secret exposure detection
+- Dependency vulnerability scanning
+- OWASP Top 10 checking
+
+**Task Types:**
+- `review-security`: Full security review
+- `review-auth`: Authentication/authorization review
+- `review-input`: Input validation review
+
+**Critical Issues (Always FAIL):**
+- Hardcoded secrets/credentials
+- SQL injection vulnerabilities
+- XSS vulnerabilities
+- Missing authentication
+- Broken access control
+- Sensitive data exposure
+
+**Model:** opus (required for security analysis)
+
+---
+
+## Severity-Based Issue Handling
+
+| Severity | Action | Tracking |
+|----------|--------|----------|
+| **Critical** | BLOCK. Dispatch fix subagent immediately. Re-run ALL 3 reviewers. | None (must fix) |
+| **High** | BLOCK. Dispatch fix subagent. Re-run ALL 3 reviewers. | None (must fix) |
+| **Medium** | BLOCK. Dispatch fix subagent. Re-run ALL 3 reviewers. | None (must fix) |
+| **Low** | PASS. Add TODO comment, commit, continue. | `# TODO(review): [issue] - [reviewer], [date], Severity: Low` |
+| **Cosmetic** | PASS. Add FIXME comment, commit, continue. | `# FIXME(nitpick): [issue] - [reviewer], [date], Severity: Cosmetic` |
+
+---
+
+## Model Selection by Task Type
+
+| Task Type | Model | Rationale |
+|-----------|-------|-----------|
+| Implementation | sonnet | Fast, good enough for coding |
+| Code Review | opus | Deep analysis, catches subtle issues |
+| Security Review | opus | Critical, needs thoroughness |
+| Business Logic Review | opus | Needs to understand requirements deeply |
+| Documentation | sonnet | Straightforward writing |
+| Quick fixes | haiku | Fast iteration |

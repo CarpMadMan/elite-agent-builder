@@ -28,14 +28,14 @@ trap cleanup EXIT
 cd "$TEST_DIR"
 
 echo "========================================"
-echo "Loki Mode Task Queue Tests"
+echo "ELITE Task Queue Tests"
 echo "========================================"
 echo ""
 
 # Initialize structure
-mkdir -p .loki/{state/locks,queue}
+mkdir -p .elite/{state/locks,queue}
 for f in pending in-progress completed failed dead-letter; do
-    echo '{"tasks":[]}' > ".loki/queue/$f.json"
+    echo '{"tasks":[]}' > ".elite/queue/$f.json"
 done
 
 # Helper function to add task
@@ -62,16 +62,16 @@ EOF
 
     # Add to pending queue
     if command -v jq &> /dev/null; then
-        jq --argjson task "$task" '.tasks += [$task]' .loki/queue/pending.json > tmp.json && mv tmp.json .loki/queue/pending.json
+        jq --argjson task "$task" '.tasks += [$task]' .elite/queue/pending.json > tmp.json && mv tmp.json .elite/queue/pending.json
     else
         # Fallback without jq
         python3 -c "
 import json
-with open('.loki/queue/pending.json', 'r') as f:
+with open('.elite/queue/pending.json', 'r') as f:
     data = json.load(f)
 task = json.loads('''$task''')
 data['tasks'].append(task)
-with open('.loki/queue/pending.json', 'w') as f:
+with open('.elite/queue/pending.json', 'w') as f:
     json.dump(data, f)
 "
     fi
@@ -81,7 +81,7 @@ with open('.loki/queue/pending.json', 'w') as f:
 log_test "Add task to pending queue"
 add_task "task-001" "eng-backend" 5
 
-task_count=$(python3 -c "import json; print(len(json.load(open('.loki/queue/pending.json'))['tasks']))")
+task_count=$(python3 -c "import json; print(len(json.load(open('.elite/queue/pending.json'))['tasks']))")
 if [ "$task_count" -eq 1 ]; then
     log_pass "Task added to pending queue"
 else
@@ -94,7 +94,7 @@ add_task "task-002" "eng-frontend" 3
 add_task "task-003" "eng-backend" 10
 add_task "task-004" "ops-devops" 1
 
-task_count=$(python3 -c "import json; print(len(json.load(open('.loki/queue/pending.json'))['tasks']))")
+task_count=$(python3 -c "import json; print(len(json.load(open('.elite/queue/pending.json'))['tasks']))")
 if [ "$task_count" -eq 4 ]; then
     log_pass "Multiple tasks added"
 else
@@ -105,7 +105,7 @@ fi
 log_test "Priority ordering"
 highest_priority=$(python3 -c "
 import json
-data = json.load(open('.loki/queue/pending.json'))
+data = json.load(open('.elite/queue/pending.json'))
 sorted_tasks = sorted(data['tasks'], key=lambda t: -t['priority'])
 print(sorted_tasks[0]['id'])
 ")
@@ -124,9 +124,9 @@ import os
 from datetime import datetime
 
 # Simulate atomic claim with file locking
-queue_file = '.loki/queue/pending.json'
-progress_file = '.loki/queue/in-progress.json'
-lock_file = '.loki/state/locks/queue.lock'
+queue_file = '.elite/queue/pending.json'
+progress_file = '.elite/queue/in-progress.json'
+lock_file = '.elite/state/locks/queue.lock'
 
 # Read pending
 with open(queue_file, 'r') as f:
@@ -164,7 +164,7 @@ EOF
 
 claimed=$(python3 -c "
 import json
-data = json.load(open('.loki/queue/in-progress.json'))
+data = json.load(open('.elite/queue/in-progress.json'))
 if data['tasks']:
     print(data['tasks'][0]['id'])
 else:
@@ -183,8 +183,8 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-progress_file = '.loki/queue/in-progress.json'
-completed_file = '.loki/queue/completed.json'
+progress_file = '.elite/queue/in-progress.json'
+completed_file = '.elite/queue/completed.json'
 
 with open(progress_file, 'r') as f:
     progress = json.load(f)
@@ -209,7 +209,7 @@ if progress['tasks']:
     print("COMPLETED")
 EOF
 
-completed_count=$(python3 -c "import json; print(len(json.load(open('.loki/queue/completed.json'))['tasks']))")
+completed_count=$(python3 -c "import json; print(len(json.load(open('.elite/queue/completed.json'))['tasks']))")
 if [ "$completed_count" -eq 1 ]; then
     log_pass "Task completed successfully"
 else
@@ -223,8 +223,8 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-queue_file = '.loki/queue/pending.json'
-progress_file = '.loki/queue/in-progress.json'
+queue_file = '.elite/queue/pending.json'
+progress_file = '.elite/queue/in-progress.json'
 
 with open(queue_file, 'r') as f:
     pending = json.load(f)
@@ -251,8 +251,8 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-progress_file = '.loki/queue/in-progress.json'
-pending_file = '.loki/queue/pending.json'
+progress_file = '.elite/queue/in-progress.json'
+pending_file = '.elite/queue/pending.json'
 
 with open(progress_file, 'r') as f:
     progress = json.load(f)
@@ -282,7 +282,7 @@ EOF
 
 retry_count=$(python3 -c "
 import json
-data = json.load(open('.loki/queue/pending.json'))
+data = json.load(open('.elite/queue/pending.json'))
 for t in data['tasks']:
     if t.get('retries', 0) > 0:
         print(t['retries'])
@@ -303,8 +303,8 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-pending_file = '.loki/queue/pending.json'
-dlq_file = '.loki/queue/dead-letter.json'
+pending_file = '.elite/queue/pending.json'
+dlq_file = '.elite/queue/dead-letter.json'
 
 with open(pending_file, 'r') as f:
     pending = json.load(f)
@@ -331,7 +331,7 @@ with open(dlq_file, 'w') as f:
 print("MOVED_TO_DLQ")
 EOF
 
-dlq_count=$(python3 -c "import json; print(len(json.load(open('.loki/queue/dead-letter.json'))['tasks']))")
+dlq_count=$(python3 -c "import json; print(len(json.load(open('.elite/queue/dead-letter.json'))['tasks']))")
 if [ "$dlq_count" -eq 1 ]; then
     log_pass "Task moved to dead letter queue"
 else
@@ -344,7 +344,7 @@ python3 << 'EOF'
 import json
 import hashlib
 
-pending_file = '.loki/queue/pending.json'
+pending_file = '.elite/queue/pending.json'
 
 with open(pending_file, 'r') as f:
     pending = json.load(f)

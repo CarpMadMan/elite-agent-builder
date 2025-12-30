@@ -27,15 +27,15 @@ trap cleanup EXIT
 cd "$TEST_DIR"
 
 echo "========================================"
-echo "Loki Mode State Recovery Tests"
+echo "ELITE State Recovery Tests"
 echo "========================================"
 echo ""
 
 # Initialize structure
-mkdir -p .loki/{state/{agents,checkpoints},queue,artifacts/backups}
+mkdir -p .elite/{state/{agents,checkpoints},queue,artifacts/backups}
 
 # Create initial state
-cat > .loki/state/orchestrator.json << 'EOF'
+cat > .elite/state/orchestrator.json << 'EOF'
 {
   "version": "2.1.0",
   "startupId": "test-session-001",
@@ -49,7 +49,7 @@ cat > .loki/state/orchestrator.json << 'EOF'
 EOF
 
 # Create agent state
-cat > .loki/state/agents/eng-backend-01.json << 'EOF'
+cat > .elite/state/agents/eng-backend-01.json << 'EOF'
 {
   "id": "eng-backend-01",
   "status": "active",
@@ -60,20 +60,20 @@ cat > .loki/state/agents/eng-backend-01.json << 'EOF'
 EOF
 
 # Create queue state
-cat > .loki/queue/pending.json << 'EOF'
+cat > .elite/queue/pending.json << 'EOF'
 {"tasks":[{"id":"task-043","type":"eng-frontend","priority":5}]}
 EOF
-cat > .loki/queue/in-progress.json << 'EOF'
+cat > .elite/queue/in-progress.json << 'EOF'
 {"tasks":[{"id":"task-042","type":"eng-backend","claimedBy":"eng-backend-01"}]}
 EOF
 
 # Test 1: Create checkpoint
 log_test "Create checkpoint"
-CHECKPOINT_DIR=".loki/state/checkpoints/$(date +%Y%m%d-%H%M%S)"
+CHECKPOINT_DIR=".elite/state/checkpoints/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$CHECKPOINT_DIR"
-cp .loki/state/orchestrator.json "$CHECKPOINT_DIR/"
-cp -r .loki/state/agents "$CHECKPOINT_DIR/"
-cp -r .loki/queue "$CHECKPOINT_DIR/"
+cp .elite/state/orchestrator.json "$CHECKPOINT_DIR/"
+cp -r .elite/state/agents "$CHECKPOINT_DIR/"
+cp -r .elite/queue "$CHECKPOINT_DIR/"
 
 if [ -f "$CHECKPOINT_DIR/orchestrator.json" ] && [ -d "$CHECKPOINT_DIR/agents" ]; then
     log_pass "Checkpoint created at $CHECKPOINT_DIR"
@@ -87,12 +87,12 @@ python3 << EOF
 import json
 from datetime import datetime
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 state['lastCheckpoint'] = datetime.utcnow().isoformat() + 'Z'
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 
 print("UPDATED")
@@ -100,7 +100,7 @@ EOF
 
 has_checkpoint=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print('yes' if data.get('lastCheckpoint') else 'no')
 ")
 
@@ -112,7 +112,7 @@ fi
 
 # Test 3: Simulate crash and corrupt state
 log_test "Detect corrupted state"
-echo "corrupted{json" > .loki/state/orchestrator.json.corrupted
+echo "corrupted{json" > .elite/state/orchestrator.json.corrupted
 
 python3 << 'EOF'
 import json
@@ -125,7 +125,7 @@ def is_valid_state(filepath):
     except (json.JSONDecodeError, KeyError):
         return False
 
-is_valid = is_valid_state('.loki/state/orchestrator.json.corrupted')
+is_valid = is_valid_state('.elite/state/orchestrator.json.corrupted')
 print("CORRUPTED" if not is_valid else "VALID")
 assert not is_valid, "Should detect corrupted state"
 EOF
@@ -141,7 +141,7 @@ import shutil
 from pathlib import Path
 
 # Find latest checkpoint
-checkpoints_dir = Path('.loki/state/checkpoints')
+checkpoints_dir = Path('.elite/state/checkpoints')
 checkpoints = sorted(checkpoints_dir.iterdir(), reverse=True)
 
 if checkpoints:
@@ -149,17 +149,17 @@ if checkpoints:
 
     # Restore orchestrator state
     if (latest / 'orchestrator.json').exists():
-        shutil.copy(latest / 'orchestrator.json', '.loki/state/orchestrator.json')
+        shutil.copy(latest / 'orchestrator.json', '.elite/state/orchestrator.json')
 
     # Restore agent states
     if (latest / 'agents').exists():
         for agent_file in (latest / 'agents').iterdir():
-            shutil.copy(agent_file, f'.loki/state/agents/{agent_file.name}')
+            shutil.copy(agent_file, f'.elite/state/agents/{agent_file.name}')
 
     # Restore queue
     if (latest / 'queue').exists():
         for queue_file in (latest / 'queue').iterdir():
-            shutil.copy(queue_file, f'.loki/queue/{queue_file.name}')
+            shutil.copy(queue_file, f'.elite/queue/{queue_file.name}')
 
     print(f"RESTORED:{latest.name}")
 else:
@@ -169,7 +169,7 @@ EOF
 # Verify restoration
 restored_version=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data.get('version', 'unknown'))
 ")
 
@@ -195,12 +195,12 @@ old_task = {
     "claimedAt": (datetime.utcnow() - timedelta(hours=2)).isoformat() + 'Z'
 }
 
-with open('.loki/queue/in-progress.json', 'r') as f:
+with open('.elite/queue/in-progress.json', 'r') as f:
     in_progress = json.load(f)
 
 in_progress['tasks'].append(old_task)
 
-with open('.loki/queue/in-progress.json', 'w') as f:
+with open('.elite/queue/in-progress.json', 'w') as f:
     json.dump(in_progress, f)
 
 def find_orphaned_tasks(in_progress_tasks):
@@ -232,10 +232,10 @@ from datetime import datetime, timedelta
 
 CLAIM_TIMEOUT = 3600
 
-with open('.loki/queue/in-progress.json', 'r') as f:
+with open('.elite/queue/in-progress.json', 'r') as f:
     in_progress = json.load(f)
 
-with open('.loki/queue/pending.json', 'r') as f:
+with open('.elite/queue/pending.json', 'r') as f:
     pending = json.load(f)
 
 now = datetime.utcnow()
@@ -257,10 +257,10 @@ for task in in_progress['tasks'][:]:
             in_progress['tasks'].remove(task)
             requeued.append(task['id'])
 
-with open('.loki/queue/in-progress.json', 'w') as f:
+with open('.elite/queue/in-progress.json', 'w') as f:
     json.dump(in_progress, f)
 
-with open('.loki/queue/pending.json', 'w') as f:
+with open('.elite/queue/pending.json', 'w') as f:
     json.dump(pending, f)
 
 print(f"REQUEUED:{len(requeued)}")
@@ -312,7 +312,7 @@ def recover_system():
 
     # 1. Check orchestrator state
     try:
-        with open('.loki/state/orchestrator.json', 'r') as f:
+        with open('.elite/state/orchestrator.json', 'r') as f:
             state = json.load(f)
         recovery_log.append("Orchestrator state: OK")
     except:
@@ -320,7 +320,7 @@ def recover_system():
         # Would restore here
 
     # 2. Check agent states
-    agents_dir = Path('.loki/state/agents')
+    agents_dir = Path('.elite/state/agents')
     active_agents = []
     dead_agents = []
 
@@ -341,7 +341,7 @@ def recover_system():
     recovery_log.append(f"Dead agents: {len(dead_agents)}")
 
     # 3. Re-queue tasks from dead agents
-    with open('.loki/queue/in-progress.json', 'r') as f:
+    with open('.elite/queue/in-progress.json', 'r') as f:
         in_progress = json.load(f)
 
     requeued = 0
@@ -351,7 +351,7 @@ def recover_system():
             task['claimedAt'] = None
             requeued += 1
 
-    with open('.loki/queue/in-progress.json', 'w') as f:
+    with open('.elite/queue/in-progress.json', 'w') as f:
         json.dump(in_progress, f)
 
     recovery_log.append(f"Re-queued tasks: {requeued}")

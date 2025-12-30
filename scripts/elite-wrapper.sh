@@ -1,27 +1,29 @@
 #!/bin/bash
-# Loki Mode Wrapper Script
+#===============================================================================
+# ELITE Wrapper Script
 # Provides true autonomy by auto-resuming on rate limits or interruptions
 #
 # How it works:
-# 1. Launches Claude Code with Loki Mode prompt
+# 1. Launches Claude Code with Agent Mode
 # 2. Monitors the process - when Claude exits, checks exit code
 # 3. On rate limit (exit code != 0), waits with exponential backoff
 # 4. Restarts automatically, telling Claude to resume from checkpoint
 # 5. Continues until successful completion or max retries exceeded
 #
 # Usage:
-#   ./scripts/loki-wrapper.sh [PRD_PATH]
-#   ./scripts/loki-wrapper.sh ./docs/requirements.md
-#   ./scripts/loki-wrapper.sh  # Interactive mode
+#   ./scripts/elite-wrapper.sh [ARD_PATH]
+#   ./scripts/elite-wrapper.sh ./docs/requirements.md
+#   ./scripts/elite-wrapper.sh  # Interactive mode
+#===============================================================================
 
 set -uo pipefail
 
 # Configuration
-MAX_RETRIES=${LOKI_MAX_RETRIES:-50}           # Maximum retry attempts
-BASE_WAIT=${LOKI_BASE_WAIT:-60}               # Base wait time in seconds
-MAX_WAIT=${LOKI_MAX_WAIT:-3600}               # Max wait time (1 hour)
-LOG_FILE=${LOKI_LOG_FILE:-.loki/wrapper.log}  # Log file location
-STATE_FILE=${LOKI_STATE_FILE:-.loki/wrapper-state.json}
+MAX_RETRIES=${ELITE_MAX_RETRIES:-50}           # Maximum retry attempts
+BASE_WAIT=${ELITE_BASE_WAIT:-60}               # Base wait time in seconds
+MAX_WAIT=${ELITE_MAX_WAIT:-3600}               # Max wait time (1 hour)
+LOG_FILE=${ELITE_LOG_FILE:-.elite/wrapper.log}  # Log file location
+STATE_FILE=${ELITE_STATE_FILE:-.elite/wrapper-state.json}
 
 # Colors
 RED='\033[0;31m'
@@ -43,8 +45,8 @@ log_warn() { log "${YELLOW}WARN${NC}" "$*"; }
 log_error() { log "${RED}ERROR${NC}" "$*"; }
 log_success() { log "${GREEN}SUCCESS${NC}" "$*"; }
 
-# Ensure .loki directory exists
-mkdir -p .loki
+# Ensure .elite directory exists
+mkdir -p .elite
 
 # Parse arguments
 PRD_PATH="${1:-}"
@@ -52,13 +54,13 @@ INITIAL_PROMPT=""
 
 if [ -n "$PRD_PATH" ]; then
     if [ -f "$PRD_PATH" ]; then
-        INITIAL_PROMPT="Loki Mode with PRD at $PRD_PATH"
+        INITIAL_PROMPT="Agent Mode with ARD at $PRD_PATH"
     else
-        log_error "PRD file not found: $PRD_PATH"
+        log_error "ARD file not found: $PRD_PATH"
         exit 1
     fi
 else
-    INITIAL_PROMPT="Loki Mode"
+    INITIAL_PROMPT="Agent Mode"
 fi
 
 # Save wrapper state
@@ -73,7 +75,7 @@ save_state() {
     "status": "$status",
     "lastExitCode": $last_exit_code,
     "lastRun": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-    "prdPath": "$PRD_PATH",
+    "ardPath": "$PRD_PATH",
     "pid": $$
 }
 EOF
@@ -115,9 +117,9 @@ is_rate_limit() {
 
     # Exit code 1 with rate limit indicators in log
     if [ $exit_code -ne 0 ]; then
-        # Check recent .loki logs for rate limit indicators
-        if [ -d ".loki/logs" ]; then
-            if grep -r -l "rate.limit\|429\|too.many.requests\|quota.exceeded" .loki/logs/*.log 2>/dev/null | head -1 | grep -q .; then
+        # Check recent .elite logs for rate limit indicators
+        if [ -d ".elite/logs" ]; then
+            if grep -r -l "rate.limit\|429\|too.many.requests\|quota.exceeded" .elite/logs/*.log 2>/dev/null | head -1 | grep -q .; then
                 return 0
             fi
         fi
@@ -127,12 +129,12 @@ is_rate_limit() {
     return 1
 }
 
-# Check if Loki Mode completed successfully
+# Check if ELITE completed successfully
 is_completed() {
     # Check for completion markers
-    if [ -f ".loki/state/orchestrator.json" ]; then
+    if [ -f ".elite/state/orchestrator.json" ]; then
         if command -v python3 &> /dev/null; then
-            local phase=$(python3 -c "import json; print(json.load(open('.loki/state/orchestrator.json')).get('currentPhase', ''))" 2>/dev/null || echo "")
+            local phase=$(python3 -c "import json; print(json.load(open('.elite/state/orchestrator.json')).get('currentPhase', ''))" 2>/dev/null || echo "")
             if [ "$phase" = "COMPLETED" ] || [ "$phase" = "complete" ]; then
                 return 0
             fi
@@ -140,7 +142,7 @@ is_completed() {
     fi
 
     # Check for success file
-    if [ -f ".loki/COMPLETED" ]; then
+    if [ -f ".elite/COMPLETED" ]; then
         return 0
     fi
 
@@ -156,9 +158,9 @@ build_resume_prompt() {
     else
         # Resume from checkpoint
         if [ -n "$PRD_PATH" ]; then
-            echo "Loki Mode - Resume from checkpoint. PRD at $PRD_PATH. This is retry #$retry after rate limit. Check .loki/state/ for current progress and continue from where we left off."
+            echo "Agent Mode - Resume from checkpoint. ARD at $PRD_PATH. This is retry #$retry after rate limit. Check .elite/state/ for current progress and continue from where we left off."
         else
-            echo "Loki Mode - Resume from checkpoint. This is retry #$retry after rate limit. Check .loki/state/ for current progress and continue from where we left off."
+            echo "Agent Mode - Resume from checkpoint. This is retry #$retry after rate limit. Check .elite/state/ for current progress and continue from where we left off."
         fi
     fi
 }
@@ -166,9 +168,9 @@ build_resume_prompt() {
 # Main execution loop
 main() {
     log_info "=========================================="
-    log_info "Loki Mode Autonomous Wrapper"
+    log_info "ELITE Autonomous Wrapper"
     log_info "=========================================="
-    log_info "PRD: ${PRD_PATH:-Interactive}"
+    log_info "ARD: ${PRD_PATH:-Interactive}"
     log_info "Max retries: $MAX_RETRIES"
     log_info "Base wait: ${BASE_WAIT}s"
     log_info ""
@@ -208,7 +210,7 @@ main() {
         # Check for successful completion
         if [ $exit_code -eq 0 ]; then
             if is_completed; then
-                log_success "Loki Mode completed successfully!"
+                log_success "ELITE completed successfully!"
                 save_state $retry "completed" 0
                 exit 0
             else
@@ -219,11 +221,10 @@ main() {
                 if [ $duration -lt 30 ]; then
                     log_warn "Session was very short (${duration}s). User may have exited intentionally."
                     log_info "Waiting 10 seconds before checking again..."
-                    sleep 10
 
                     # Re-check completion
                     if is_completed; then
-                        log_success "Loki Mode completed!"
+                        log_success "ELITE completed!"
                         exit 0
                     fi
                 fi

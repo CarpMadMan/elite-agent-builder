@@ -204,13 +204,13 @@ claude --dangerously-skip-permissions
 > Agent Mode with ARD at ./docs/requirements.md
 ```
 
-## Getting Started with PRD Coach
+## Getting Started with ARD Coach
 
-New to ELITE? Start with **PRD Coach** - an interactive skill that helps you develop your ARD (Agent Requirements Document) before building.
+New to ELITE? Start with **ARD Coach** - an interactive skill that helps you develop your ARD (Agent Requirements Document) before building.
 
-### What is PRD Coach?
+### What is ARD Coach?
 
-PRD Coach is a conversational assistant that guides you from a rough idea to a complete, well-structured ARD ready for ELITE execution.
+ARD Coach is a conversational assistant that guides you from a rough idea to a complete, well-structured ARD ready for ELITE execution.
 
 **Benefits:**
 - No need to understand ARD format upfront
@@ -218,14 +218,14 @@ PRD Coach is a conversational assistant that guides you from a rough idea to a c
 - Immediate feedback and refinement
 - Generates properly formatted ARDs automatically
 
-### Using PRD Coach
+### Using ARD Coach
 
 ```bash
 # Launch Claude Code
 claude --dangerously-skip-permissions
 
-# Trigger PRD Coach
-> PRD Coach
+# Trigger ARD Coach
+> ARD Coach
 ```
 
 **Or try these trigger phrases:**
@@ -233,7 +233,7 @@ claude --dangerously-skip-permissions
 - "Help me write requirements"
 - "Help me write an ARD"
 
-### PRD Coach Workflow
+### ARD Coach Workflow
 
 ```
 ┌─────────────────┐    ┌──────────────────┐    ┌─────────────────┐
@@ -258,9 +258,9 @@ claude --dangerously-skip-permissions
 ### Example Session
 
 ```
-You: PRD Coach
+You: ARD Coach
 
-Coach: Welcome to PRD Coach! Which mode would you prefer?
+Coach: Welcome to ARD Coach! Which mode would you prefer?
        1. Quick mode: 5-7 core questions
        2. Deep dive: 15-20 comprehensive questions
 
@@ -287,20 +287,20 @@ Coach: What would you like to do?
 You: Approve
 
 Coach: Your ARD is ready! Would you like me to execute ELITE now?
-       [If yes: runs ./autonomy/run.sh .elite/prd-coach-ard.md]
+       [If yes: runs ./autonomy/run.sh .elite/ard-coach-ard.md]
 ```
 
-### Installing PRD Coach
+### Installing ARD Coach
 
-PRD Coach is included with ELITE. Install it alongside the main skill:
+ARD Coach is included with ELITE. Install it alongside the main skill:
 
 ```bash
-# Create symlink for PRD Coach
-mkdir -p ~/.claude/skills/prd-coach
-ln -s "$(pwd)/skills/prd-coach/SKILL.md" ~/.claude/skills/prd-coach/
+# Create symlink for ARD Coach
+mkdir -p ~/.claude/skills/ard-coach
+ln -s "$(pwd)/skills/ard-coach/SKILL.md" ~/.claude/skills/ard-coach/
 ```
 
-See [PRD Coach Documentation](docs/prd-coach-guide.md) for complete usage guide.
+See [ARD Coach Documentation](docs/ard-coach-guide.md) for complete usage guide.
 
 ---
 

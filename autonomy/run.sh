@@ -1,6 +1,6 @@
 #!/bin/bash
 #===============================================================================
-# Loki Mode - Autonomous Runner
+# ELITE - Autonomous Runner
 # Single script that handles prerequisites, setup, and autonomous execution
 #
 # Usage:
@@ -9,25 +9,25 @@
 #   ./autonomy/run.sh                          # Interactive mode
 #
 # Environment Variables:
-#   LOKI_MAX_RETRIES    - Max retry attempts (default: 50)
-#   LOKI_BASE_WAIT      - Base wait time in seconds (default: 60)
-#   LOKI_MAX_WAIT       - Max wait time in seconds (default: 3600)
-#   LOKI_SKIP_PREREQS   - Skip prerequisite checks (default: false)
-#   LOKI_DASHBOARD      - Enable web dashboard (default: true)
-#   LOKI_DASHBOARD_PORT - Dashboard port (default: 57374)
+#   ELITE_MAX_RETRIES    - Max retry attempts (default: 50)
+#   ELITE_BASE_WAIT      - Base wait time in seconds (default: 60)
+#   ELITE_MAX_WAIT       - Max wait time in seconds (default: 3600)
+#   ELITE_SKIP_PREREQS   - Skip prerequisite checks (default: false)
+#   ELITE_DASHBOARD      - Enable web dashboard (default: true)
+#   ELITE_DASHBOARD_PORT - Dashboard port (default: 57374)
 #
 # SDLC Phase Controls (all enabled by default, set to 'false' to skip):
-#   LOKI_PHASE_UNIT_TESTS      - Run unit tests (default: true)
-#   LOKI_PHASE_API_TESTS       - Functional API testing (default: true)
-#   LOKI_PHASE_E2E_TESTS       - E2E/UI testing with Playwright (default: true)
-#   LOKI_PHASE_SECURITY        - Security scanning OWASP/auth (default: true)
-#   LOKI_PHASE_INTEGRATION     - Integration tests SAML/OIDC/SSO (default: true)
-#   LOKI_PHASE_CODE_REVIEW     - 3-reviewer parallel code review (default: true)
-#   LOKI_PHASE_WEB_RESEARCH    - Competitor/feature gap research (default: true)
-#   LOKI_PHASE_PERFORMANCE     - Load/performance testing (default: true)
-#   LOKI_PHASE_ACCESSIBILITY   - WCAG compliance testing (default: true)
-#   LOKI_PHASE_REGRESSION      - Regression testing (default: true)
-#   LOKI_PHASE_UAT             - UAT simulation (default: true)
+#   ELITE_PHASE_UNIT_TESTS      - Run unit tests (default: true)
+#   ELITE_PHASE_API_TESTS       - Functional API testing (default: true)
+#   ELITE_PHASE_E2E_TESTS       - E2E/UI testing with Playwright (default: true)
+#   ELITE_PHASE_SECURITY        - Security scanning OWASP/auth (default: true)
+#   ELITE_PHASE_INTEGRATION     - Integration tests SAML/OIDC/SSO (default: true)
+#   ELITE_PHASE_CODE_REVIEW     - 3-reviewer parallel code review (default: true)
+#   ELITE_PHASE_WEB_RESEARCH    - Competitor/feature gap research (default: true)
+#   ELITE_PHASE_PERFORMANCE     - Load/performance testing (default: true)
+#   ELITE_PHASE_ACCESSIBILITY   - WCAG compliance testing (default: true)
+#   ELITE_PHASE_REGRESSION      - Regression testing (default: true)
+#   ELITE_PHASE_UAT             - UAT simulation (default: true)
 #===============================================================================
 
 set -uo pipefail
@@ -36,27 +36,27 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 # Configuration
-MAX_RETRIES=${LOKI_MAX_RETRIES:-50}
-BASE_WAIT=${LOKI_BASE_WAIT:-60}
-MAX_WAIT=${LOKI_MAX_WAIT:-3600}
-SKIP_PREREQS=${LOKI_SKIP_PREREQS:-false}
-ENABLE_DASHBOARD=${LOKI_DASHBOARD:-true}
-DASHBOARD_PORT=${LOKI_DASHBOARD_PORT:-57374}
+MAX_RETRIES=${ELITE_MAX_RETRIES:-50}
+BASE_WAIT=${ELITE_BASE_WAIT:-60}
+MAX_WAIT=${ELITE_MAX_WAIT:-3600}
+SKIP_PREREQS=${ELITE_SKIP_PREREQS:-false}
+ENABLE_DASHBOARD=${ELITE_DASHBOARD:-true}
+DASHBOARD_PORT=${ELITE_DASHBOARD_PORT:-57374}
 STATUS_MONITOR_PID=""
 DASHBOARD_PID=""
 
 # SDLC Phase Controls (all enabled by default)
-PHASE_UNIT_TESTS=${LOKI_PHASE_UNIT_TESTS:-true}
-PHASE_API_TESTS=${LOKI_PHASE_API_TESTS:-true}
-PHASE_E2E_TESTS=${LOKI_PHASE_E2E_TESTS:-true}
-PHASE_SECURITY=${LOKI_PHASE_SECURITY:-true}
-PHASE_INTEGRATION=${LOKI_PHASE_INTEGRATION:-true}
-PHASE_CODE_REVIEW=${LOKI_PHASE_CODE_REVIEW:-true}
-PHASE_WEB_RESEARCH=${LOKI_PHASE_WEB_RESEARCH:-true}
-PHASE_PERFORMANCE=${LOKI_PHASE_PERFORMANCE:-true}
-PHASE_ACCESSIBILITY=${LOKI_PHASE_ACCESSIBILITY:-true}
-PHASE_REGRESSION=${LOKI_PHASE_REGRESSION:-true}
-PHASE_UAT=${LOKI_PHASE_UAT:-true}
+PHASE_UNIT_TESTS=${ELITE_PHASE_UNIT_TESTS:-true}
+PHASE_API_TESTS=${ELITE_PHASE_API_TESTS:-true}
+PHASE_E2E_TESTS=${ELITE_PHASE_E2E_TESTS:-true}
+PHASE_SECURITY=${ELITE_PHASE_SECURITY:-true}
+PHASE_INTEGRATION=${ELITE_PHASE_INTEGRATION:-true}
+PHASE_CODE_REVIEW=${ELITE_PHASE_CODE_REVIEW:-true}
+PHASE_WEB_RESEARCH=${ELITE_PHASE_WEB_RESEARCH:-true}
+PHASE_PERFORMANCE=${ELITE_PHASE_PERFORMANCE:-true}
+PHASE_ACCESSIBILITY=${ELITE_PHASE_ACCESSIBILITY:-true}
+PHASE_REGRESSION=${ELITE_PHASE_REGRESSION:-true}
+PHASE_UAT=${ELITE_PHASE_UAT:-true}
 
 # Colors
 RED='\033[0;31m'
@@ -172,11 +172,11 @@ check_prerequisites() {
 #===============================================================================
 
 check_skill_installed() {
-    log_header "Checking Loki Mode Skill"
+    log_header "Checking ELITE Skill"
 
     local skill_locations=(
-        "$HOME/.claude/skills/loki-mode/SKILL.md"
-        ".claude/skills/loki-mode/SKILL.md"
+        "$HOME/.claude/skills/agent-mode/SKILL.md"
+        ".claude/skills/agent-mode/SKILL.md"
         "$PROJECT_DIR/SKILL.md"
     )
 
@@ -187,7 +187,7 @@ check_skill_installed() {
         fi
     done
 
-    log_warn "Loki Mode skill not found in standard locations"
+    log_warn "ELITE skill not found in standard locations"
     log_info "The skill will be used from: $PROJECT_DIR/SKILL.md"
 
     if [ -f "$PROJECT_DIR/SKILL.md" ]; then
@@ -200,27 +200,27 @@ check_skill_installed() {
 }
 
 #===============================================================================
-# Initialize Loki Directory
+# Initialize ELITE Directory
 #===============================================================================
 
-init_loki_dir() {
-    log_header "Initializing Loki Mode Directory"
+init_elite_dir() {
+    log_header "Initializing ELITE Directory"
 
-    mkdir -p .loki/{state,queue,messages,logs,config,prompts,artifacts,scripts}
-    mkdir -p .loki/queue
-    mkdir -p .loki/state/checkpoints
-    mkdir -p .loki/artifacts/{releases,reports,backups}
+    mkdir -p .elite/{state,queue,messages,logs,config,prompts,artifacts,scripts}
+    mkdir -p .elite/queue
+    mkdir -p .elite/state/checkpoints
+    mkdir -p .elite/artifacts/{releases,reports,backups}
 
     # Initialize queue files if they don't exist
     for queue in pending in-progress completed failed dead-letter; do
-        if [ ! -f ".loki/queue/${queue}.json" ]; then
-            echo "[]" > ".loki/queue/${queue}.json"
+        if [ ! -f ".elite/queue/${queue}.json" ]; then
+            echo "[]" > ".elite/queue/${queue}.json"
         fi
     done
 
     # Initialize orchestrator state if it doesn't exist
-    if [ ! -f ".loki/state/orchestrator.json" ]; then
-        cat > ".loki/state/orchestrator.json" << EOF
+    if [ ! -f ".elite/state/orchestrator.json" ]; then
+        cat > ".elite/state/orchestrator.json" << EOF
 {
     "version": "$(cat "$PROJECT_DIR/VERSION" 2>/dev/null || echo "2.2.0")",
     "currentPhase": "BOOTSTRAP",
@@ -235,7 +235,7 @@ init_loki_dir() {
 EOF
     fi
 
-    log_info "Loki directory initialized: .loki/"
+    log_info "ELITE directory initialized: .elite/"
 }
 
 #===============================================================================
@@ -244,24 +244,24 @@ EOF
 
 update_status_file() {
     # Create a human-readable status file
-    local status_file=".loki/STATUS.txt"
+    local status_file=".elite/STATUS.txt"
 
     # Get current phase
     local current_phase="UNKNOWN"
-    if [ -f ".loki/state/orchestrator.json" ]; then
-        current_phase=$(python3 -c "import json; print(json.load(open('.loki/state/orchestrator.json')).get('currentPhase', 'UNKNOWN'))" 2>/dev/null || echo "UNKNOWN")
+    if [ -f ".elite/state/orchestrator.json" ]; then
+        current_phase=$(python3 -c "import json; print(json.load(open('.elite/state/orchestrator.json')).get('currentPhase', 'UNKNOWN'))" 2>/dev/null || echo "UNKNOWN")
     fi
 
     # Count tasks in each queue
     local pending=0 in_progress=0 completed=0 failed=0
-    [ -f ".loki/queue/pending.json" ] && pending=$(python3 -c "import json; print(len(json.load(open('.loki/queue/pending.json'))))" 2>/dev/null || echo "0")
-    [ -f ".loki/queue/in-progress.json" ] && in_progress=$(python3 -c "import json; print(len(json.load(open('.loki/queue/in-progress.json'))))" 2>/dev/null || echo "0")
-    [ -f ".loki/queue/completed.json" ] && completed=$(python3 -c "import json; print(len(json.load(open('.loki/queue/completed.json'))))" 2>/dev/null || echo "0")
-    [ -f ".loki/queue/failed.json" ] && failed=$(python3 -c "import json; print(len(json.load(open('.loki/queue/failed.json'))))" 2>/dev/null || echo "0")
+    [ -f ".elite/queue/pending.json" ] && pending=$(python3 -c "import json; print(len(json.load(open('.elite/queue/pending.json'))))" 2>/dev/null || echo "0")
+    [ -f ".elite/queue/in-progress.json" ] && in_progress=$(python3 -c "import json; print(len(json.load(open('.elite/queue/in-progress.json'))))" 2>/dev/null || echo "0")
+    [ -f ".elite/queue/completed.json" ] && completed=$(python3 -c "import json; print(len(json.load(open('.elite/queue/completed.json'))))" 2>/dev/null || echo "0")
+    [ -f ".elite/queue/failed.json" ] && failed=$(python3 -c "import json; print(len(json.load(open('.elite/queue/failed.json'))))" 2>/dev/null || echo "0")
 
     cat > "$status_file" << EOF
 ╔════════════════════════════════════════════════════════════════╗
-║                    LOKI MODE STATUS                            ║
+║                    ELITE STATUS                                ║
 ╚════════════════════════════════════════════════════════════════╝
 
 Updated: $(date)
@@ -274,7 +274,7 @@ Tasks:
   ├─ Completed:   $completed
   └─ Failed:      $failed
 
-Monitor: watch -n 2 cat .loki/STATUS.txt
+Monitor: watch -n 2 cat .elite/STATUS.txt
 EOF
 }
 
@@ -294,7 +294,7 @@ start_status_monitor() {
     STATUS_MONITOR_PID=$!
 
     log_info "Status monitor started"
-    log_info "Monitor progress: ${CYAN}watch -n 2 cat .loki/STATUS.txt${NC}"
+    log_info "Monitor progress: ${CYAN}watch -n 2 cat .elite/STATUS.txt${NC}"
 }
 
 stop_status_monitor() {
@@ -310,13 +310,13 @@ stop_status_monitor() {
 
 generate_dashboard() {
     # Generate HTML dashboard with Anthropic design language
-    cat > .loki/dashboard/index.html << 'DASHBOARD_HTML'
+    cat > .elite/dashboard/index.html << 'DASHBOARD_HTML'
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loki Mode Dashboard</title>
+    <title>ELITE Dashboard</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -488,8 +488,8 @@ generate_dashboard() {
 </head>
 <body>
     <div class="header">
-        <h1>LOKI MODE</h1>
-        <div class="subtitle">Autonomous Multi-Agent Startup System</div>
+        <h1>ELITE</h1>
+        <div class="subtitle">Autonomous Multi-Agent System for Claude Code</div>
         <div class="phase" id="phase">Loading...</div>
     </div>
     <div class="stats">
@@ -558,10 +558,10 @@ DASHBOARD_HTML
 }
 
 start_dashboard() {
-    log_header "Starting Loki Dashboard"
+    log_header "Starting ELITE Dashboard"
 
     # Create dashboard directory
-    mkdir -p .loki/dashboard
+    mkdir -p .elite/dashboard
 
     # Generate HTML
     generate_dashboard
@@ -573,10 +573,10 @@ start_dashboard() {
         sleep 1
     fi
 
-    # Start Python HTTP server from .loki/ root so it can serve queue/ and state/
+    # Start Python HTTP server from .elite/ root so it can serve queue/ and state/
     log_step "Starting dashboard server..."
     (
-        cd .loki
+        cd .elite
         python3 -m http.server $DASHBOARD_PORT --bind 127.0.0.1 2>&1 | while read line; do
             echo "[dashboard] $line" >> logs/dashboard.log
         done
@@ -697,9 +697,9 @@ format_duration() {
 
 is_completed() {
     # Check orchestrator state
-    if [ -f ".loki/state/orchestrator.json" ]; then
+    if [ -f ".elite/state/orchestrator.json" ]; then
         if command -v python3 &> /dev/null; then
-            local phase=$(python3 -c "import json; print(json.load(open('.loki/state/orchestrator.json')).get('currentPhase', ''))" 2>/dev/null || echo "")
+            local phase=$(python3 -c "import json; print(json.load(open('.elite/state/orchestrator.json')).get('currentPhase', ''))" 2>/dev/null || echo "")
             # Accept various completion states
             if [ "$phase" = "COMPLETED" ] || [ "$phase" = "complete" ] || [ "$phase" = "finalized" ] || [ "$phase" = "growth-loop" ]; then
                 return 0
@@ -708,7 +708,7 @@ is_completed() {
     fi
 
     # Check for completion marker
-    if [ -f ".loki/COMPLETED" ]; then
+    if [ -f ".elite/COMPLETED" ]; then
         return 0
     fi
 
@@ -724,7 +724,7 @@ save_state() {
     local status="$2"
     local exit_code="$3"
 
-    cat > ".loki/autonomy-state.json" << EOF
+    cat > ".elite/autonomy-state.json" << EOF
 {
     "retryCount": $retry_count,
     "status": "$status",
@@ -739,9 +739,9 @@ EOF
 }
 
 load_state() {
-    if [ -f ".loki/autonomy-state.json" ]; then
+    if [ -f ".elite/autonomy-state.json" ]; then
         if command -v python3 &> /dev/null; then
-            RETRY_COUNT=$(python3 -c "import json; print(json.load(open('.loki/autonomy-state.json')).get('retryCount', 0))" 2>/dev/null || echo "0")
+            RETRY_COUNT=$(python3 -c "import json; print(json.load(open('.elite/autonomy-state.json')).get('retryCount', 0))" 2>/dev/null || echo "0")
         else
             RETRY_COUNT=0
         fi
@@ -774,24 +774,24 @@ build_prompt() {
     phases="${phases%,}"  # Remove trailing comma
 
     # Core autonomous instructions - DO NOT ask questions, take action
-    local autonomous_suffix="CRITICAL: You are running in FULLY AUTONOMOUS mode. DO NOT ask questions or wait for user input. Make decisions based on: 1) The PRD requirements, 2) Current state in .loki/, 3) Best practices and web search if needed. Take immediate action. If the project is complete, set currentPhase to 'finalized' in orchestrator.json and create .loki/COMPLETED marker file."
+    local autonomous_suffix="CRITICAL: You are running in FULLY AUTONOMOUS mode. DO NOT ask questions or wait for user input. Make decisions based on: 1) The ARD requirements, 2) Current state in .elite/, 3) Best practices and web search if needed. Take immediate action. If the project is complete, set currentPhase to 'finalized' in orchestrator.json and create .elite/COMPLETED marker file."
 
-    local sdlc_instruction="SDLC_PHASES_ENABLED: [$phases]. Execute ALL enabled phases in order. For each phase: run tests, log results to .loki/logs/, fail the phase if critical issues found. See SKILL.md for detailed phase instructions."
+    local sdlc_instruction="SDLC_PHASES_ENABLED: [$phases]. Execute ALL enabled phases in order. For each phase: run tests, log results to .elite/logs/, fail the phase if critical issues found. See SKILL.md for detailed phase instructions."
 
     # Codebase Analysis Mode - when no PRD provided, analyze existing codebase first
-    local analysis_instruction="CODEBASE_ANALYSIS_MODE: No PRD provided. FIRST: Analyze the existing codebase thoroughly - scan directory structure, read package.json/requirements.txt/go.mod, examine README, understand architecture from main entry points. THEN: Generate a comprehensive PRD at .loki/generated-prd.md covering: 1) Project overview, 2) Current features, 3) Tech stack, 4) Architecture, 5) Areas for improvement, 6) Missing tests/security/docs. FINALLY: Proceed with SDLC phases using the generated PRD as requirements baseline."
+    local analysis_instruction="CODEBASE_ANALYSIS_MODE: No ARD provided. FIRST: Analyze the existing codebase thoroughly - scan directory structure, read package.json/requirements.txt/go.mod, examine README, understand architecture from main entry points. THEN: Generate a comprehensive ARD at .elite/generated-ard.md covering: 1) Project overview, 2) Current features, 3) Tech stack, 4) Architecture, 5) Areas for improvement, 6) Missing tests/security/docs. FINALLY: Proceed with SDLC phases using the generated ARD as requirements baseline."
 
     if [ $retry -eq 0 ]; then
         if [ -n "$prd" ]; then
-            echo "Loki Mode with PRD at $prd. $sdlc_instruction $autonomous_suffix"
+            echo "Agent Mode with ARD at $prd. $sdlc_instruction $autonomous_suffix"
         else
-            echo "Loki Mode. $analysis_instruction $sdlc_instruction $autonomous_suffix"
+            echo "Agent Mode. $analysis_instruction $sdlc_instruction $autonomous_suffix"
         fi
     else
         if [ -n "$prd" ]; then
-            echo "Loki Mode - Resume from checkpoint. PRD at $prd. This is retry #$retry. Check .loki/state/ for progress and continue autonomously. $sdlc_instruction $autonomous_suffix"
+            echo "Agent Mode - Resume from checkpoint. ARD at $prd. This is retry #$retry. Check .elite/state/ for progress and continue autonomously. $sdlc_instruction $autonomous_suffix"
         else
-            echo "Loki Mode - Resume from checkpoint. This is retry #$retry. Check .loki/state/ for progress and continue autonomously. If .loki/generated-prd.md exists, use it as requirements baseline. $analysis_instruction $sdlc_instruction $autonomous_suffix"
+            echo "Agent Mode - Resume from checkpoint. This is retry #$retry. Check .elite/state/ for progress and continue autonomously. If .elite/generated-ard.md exists, use it as requirements baseline. $analysis_instruction $sdlc_instruction $autonomous_suffix"
         fi
     fi
 }
@@ -805,15 +805,15 @@ run_autonomous() {
 
     log_header "Starting Autonomous Execution"
 
-    # Auto-detect PRD if not provided
+    # Auto-detect ARD if not provided
     if [ -z "$prd_path" ]; then
-        log_step "No PRD provided, searching for existing PRD files..."
+        log_step "No ARD provided, searching for existing ARD files..."
         local found_prd=""
 
-        # Search common PRD file patterns
-        for pattern in "PRD.md" "prd.md" "REQUIREMENTS.md" "requirements.md" "SPEC.md" "spec.md" \
-                       "docs/PRD.md" "docs/prd.md" "docs/REQUIREMENTS.md" "docs/requirements.md" \
-                       "docs/SPEC.md" "docs/spec.md" ".github/PRD.md" "PROJECT.md" "project.md"; do
+        # Search common ARD file patterns
+        for pattern in "ARD.md" "ard.md" "REQUIREMENTS.md" "requirements.md" "SPEC.md" "spec.md" \
+                       "docs/ARD.md" "docs/ard.md" "docs/REQUIREMENTS.md" "docs/requirements.md" \
+                       "docs/SPEC.md" "docs/spec.md" ".github/ARD.md" "PROJECT.md" "project.md"; do
             if [ -f "$pattern" ]; then
                 found_prd="$pattern"
                 break
@@ -821,17 +821,17 @@ run_autonomous() {
         done
 
         if [ -n "$found_prd" ]; then
-            log_info "Found existing PRD: $found_prd"
+            log_info "Found existing ARD: $found_prd"
             prd_path="$found_prd"
-        elif [ -f ".loki/generated-prd.md" ]; then
-            log_info "Using previously generated PRD: .loki/generated-prd.md"
-            prd_path=".loki/generated-prd.md"
+        elif [ -f ".elite/generated-ard.md" ]; then
+            log_info "Using previously generated ARD: .elite/generated-ard.md"
+            prd_path=".elite/generated-ard.md"
         else
-            log_info "No PRD found - will analyze codebase and generate one"
+            log_info "No ARD found - will analyze codebase and generate one"
         fi
     fi
 
-    log_info "PRD: ${prd_path:-Codebase Analysis Mode}"
+    log_info "ARD: ${prd_path:-Codebase Analysis Mode}"
     log_info "Max retries: $MAX_RETRIES"
     log_info "Base wait: ${BASE_WAIT}s"
     log_info "Max wait: ${MAX_WAIT}s"
@@ -852,7 +852,7 @@ run_autonomous() {
 
         # Run Claude Code with live output
         local start_time=$(date +%s)
-        local log_file=".loki/logs/autonomy-$(date +%Y%m%d).log"
+        local log_file=".elite/logs/autonomy-$(date +%Y%m%d).log"
 
         echo ""
         echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -952,7 +952,7 @@ if __name__ == "__main__":
         if [ $exit_code -eq 0 ]; then
             if is_completed; then
                 echo ""
-                log_header "LOKI MODE COMPLETED SUCCESSFULLY!"
+                log_header "ELITE COMPLETED SUCCESSFULLY!"
                 save_state $retry "completed" 0
                 return 0
             fi
@@ -962,7 +962,7 @@ if __name__ == "__main__":
                 log_warn "Session was short (${duration}s). Checking if complete..."
                 sleep 5
                 if is_completed; then
-                    log_header "LOKI MODE COMPLETED!"
+                    log_header "ELITE COMPLETED!"
                     return 0
                 fi
             fi
@@ -1038,16 +1038,16 @@ main() {
     echo "  ███████╗╚██████╔╝██║  ██╗██║    ██║ ╚═╝ ██║╚██████╔╝██████╔╝███████╗"
     echo "  ╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═╝    ╚═╝     ╚═╝ ╚═════╝ ╚═════╝ ╚══════╝"
     echo -e "${NC}"
-    echo -e "  ${CYAN}Autonomous Multi-Agent Startup System${NC}"
+    echo -e "  ${CYAN}Autonomous Multi-Agent System for Claude Code${NC}"
     echo -e "  ${CYAN}Version: $(cat "$PROJECT_DIR/VERSION" 2>/dev/null || echo "2.x.x")${NC}"
     echo ""
 
     # Parse arguments
     PRD_PATH="${1:-}"
 
-    # Validate PRD if provided
+    # Validate ARD if provided
     if [ -n "$PRD_PATH" ] && [ ! -f "$PRD_PATH" ]; then
-        log_error "PRD file not found: $PRD_PATH"
+        log_error "ARD file not found: $PRD_PATH"
         exit 1
     fi
 
@@ -1057,7 +1057,7 @@ main() {
             exit 1
         fi
     else
-        log_warn "Skipping prerequisite checks (LOKI_SKIP_PREREQS=true)"
+        log_warn "Skipping prerequisite checks (ELITE_SKIP_PREREQS=true)"
     fi
 
     # Check skill installation
@@ -1065,17 +1065,17 @@ main() {
         exit 1
     fi
 
-    # Initialize .loki directory
-    init_loki_dir
+    # Initialize .elite directory
+    init_elite_dir
 
     # Start web dashboard (if enabled)
     if [ "$ENABLE_DASHBOARD" = "true" ]; then
         start_dashboard
     else
-        log_info "Dashboard disabled (LOKI_DASHBOARD=false)"
+        log_info "Dashboard disabled (ELITE_DASHBOARD=false)"
     fi
 
-    # Start status monitor (background updates to .loki/STATUS.txt)
+    # Start status monitor (background updates to .elite/STATUS.txt)
     start_status_monitor
 
     # Run autonomous loop

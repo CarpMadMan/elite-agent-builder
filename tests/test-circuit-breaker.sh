@@ -27,15 +27,15 @@ trap cleanup EXIT
 cd "$TEST_DIR"
 
 echo "========================================"
-echo "Loki Mode Circuit Breaker Tests"
+echo "ELITE Circuit Breaker Tests"
 echo "========================================"
 echo ""
 
 # Initialize structure
-mkdir -p .loki/{state,config}
+mkdir -p .elite/{state,config}
 
 # Create circuit breaker config
-cat > .loki/config/circuit-breakers.yaml << 'EOF'
+cat > .elite/config/circuit-breakers.yaml << 'EOF'
 defaults:
   failureThreshold: 5
   cooldownSeconds: 300
@@ -51,7 +51,7 @@ overrides:
 EOF
 
 # Initialize orchestrator state
-cat > .loki/state/orchestrator.json << 'EOF'
+cat > .elite/state/orchestrator.json << 'EOF'
 {
   "circuitBreakers": {}
 }
@@ -63,7 +63,7 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 # Initialize circuit breaker for eng-backend
@@ -75,7 +75,7 @@ state['circuitBreakers']['eng-backend'] = {
     'halfOpenAttempts': 0
 }
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 
 print("INITIALIZED")
@@ -83,7 +83,7 @@ EOF
 
 cb_state=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data['circuitBreakers']['eng-backend']['state'])
 ")
 
@@ -99,7 +99,7 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 cb = state['circuitBreakers']['eng-backend']
@@ -109,7 +109,7 @@ for i in range(3):
     cb['failures'] += 1
     cb['lastFailure'] = datetime.utcnow().isoformat() + 'Z'
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 
 print(f"FAILURES:{cb['failures']}")
@@ -117,7 +117,7 @@ EOF
 
 failures=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data['circuitBreakers']['eng-backend']['failures'])
 ")
 
@@ -136,7 +136,7 @@ from datetime import datetime, timedelta
 FAILURE_THRESHOLD = 5
 COOLDOWN_SECONDS = 300
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 cb = state['circuitBreakers']['eng-backend']
@@ -153,13 +153,13 @@ if cb['failures'] >= FAILURE_THRESHOLD:
 else:
     print(f"NOT_TRIPPED:{cb['failures']}")
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 EOF
 
 cb_state=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data['circuitBreakers']['eng-backend']['state'])
 ")
 
@@ -175,7 +175,7 @@ python3 << 'EOF'
 import json
 from datetime import datetime
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 cb = state['circuitBreakers']['eng-backend']
@@ -207,7 +207,7 @@ python3 << 'EOF'
 import json
 from datetime import datetime, timedelta
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 cb = state['circuitBreakers']['eng-backend']
@@ -222,13 +222,13 @@ if datetime.now(cooldown_time.tzinfo) > cooldown_time and cb['state'] == 'open':
     cb['halfOpenAttempts'] = 0
     print("TRANSITIONED:half-open")
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 EOF
 
 cb_state=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data['circuitBreakers']['eng-backend']['state'])
 ")
 
@@ -245,7 +245,7 @@ import json
 
 HALF_OPEN_REQUESTS = 3
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 cb = state['circuitBreakers']['eng-backend']
@@ -263,13 +263,13 @@ if cb['halfOpenAttempts'] >= HALF_OPEN_REQUESTS:
     cb['halfOpenAttempts'] = 0
     print("RECOVERED:closed")
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 EOF
 
 cb_state=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data['circuitBreakers']['eng-backend']['state'])
 ")
 
@@ -287,7 +287,7 @@ from datetime import datetime, timedelta
 
 COOLDOWN_SECONDS = 300
 
-with open('.loki/state/orchestrator.json', 'r') as f:
+with open('.elite/state/orchestrator.json', 'r') as f:
     state = json.load(f)
 
 cb = state['circuitBreakers']['eng-backend']
@@ -305,13 +305,13 @@ cb['halfOpenAttempts'] = 0
 
 print("REOPENED")
 
-with open('.loki/state/orchestrator.json', 'w') as f:
+with open('.elite/state/orchestrator.json', 'w') as f:
     json.dump(state, f, indent=2)
 EOF
 
 cb_state=$(python3 -c "
 import json
-data = json.load(open('.loki/state/orchestrator.json'))
+data = json.load(open('.elite/state/orchestrator.json'))
 print(data['circuitBreakers']['eng-backend']['state'])
 ")
 

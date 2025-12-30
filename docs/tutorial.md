@@ -59,10 +59,10 @@ ln -s "$(pwd)/SKILL.md" ~/.claude/skills/agent-mode/
 
 ```bash
 # Create PRD Coach directory
-mkdir -p ~/.claude/skills/prd-coach
+mkdir -p ~/.claude/skills/ard-coach
 
 # Install PRD Coach skill
-ln -s "$(pwd)/skills/prd-coach/SKILL.md" ~/.claude/skills/prd-coach/
+ln -s "$(pwd)/skills/ard-coach/SKILL.md" ~/.claude/skills/ard-coach/
 ```
 
 ### 1.4 Verify Installation
@@ -73,8 +73,8 @@ cat ~/.claude/skills/agent-mode/SKILL.md | grep "name:"
 # Should output: name: agent-mode
 
 # Check PRD Coach skill
-cat ~/.claude/skills/prd-coach/SKILL.md | grep "name:"
-# Should output: name: prd-coach
+cat ~/.claude/skills/ard-coach/SKILL.md | grep "name:"
+# Should output: name: ard-coach
 ```
 
 ---
@@ -292,7 +292,7 @@ ELITE will now begin autonomous execution. You'll see:
 ║                    ELITE AUTONOMOUS RUNNER                     ║
 ╠════════════════════════════════════════════════════════════════╣
 ║ Mode:         SIMPLE                                            ║
-║ ARD:          .elite/prd-coach-ard.md                           ║
+║ ARD:          .elite/ard-coach-ard.md                           ║
 ║ Phase:        BOOTSTRAP                                         ║
 ╚════════════════════════════════════════════════════════════════╝
 
@@ -418,7 +418,7 @@ claude --dangerously-skip-permissions
 
 ### Learn More
 
-- [PRD Coach Guide](prd-coach-guide.md) - Deep dive into PRD Coach
+- [PRD Coach Guide](ard-coach-guide.md) - Deep dive into PRD Coach
 - [ELITE README](../README.md) - Complete ELITE documentation
 - [Example ARDs](../examples/) - Sample requirements documents
 
@@ -434,7 +434,7 @@ claude --dangerously-skip-permissions
 
 # Verify skill installation
 ls ~/.claude/skills/agent-mode/SKILL.md
-ls ~/.claude/skills/prd-coach/SKILL.md
+ls ~/.claude/skills/ard-coach/SKILL.md
 ```
 
 ### Build Errors

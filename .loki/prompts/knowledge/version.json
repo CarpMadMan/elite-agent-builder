@@ -1,0 +1,27 @@
+{
+  "mcpProtocol": {
+    "version": "2024-12",
+    "lastUpdated": "2024-12-30T00:00:00Z",
+    "source": "https://modelcontextprotocol.io/specification",
+    "checksum": "sha256-placeholder"
+  },
+  "claudeSDK": {
+    "version": "0.32.1",
+    "lastUpdated": "2024-12-30T00:00:00Z",
+    "source": "https://docs.anthropic.com/en/docs/claude-code/agent-sdk",
+    "checksum": "sha256-placeholder"
+  },
+  "hooks": {
+    "version": "2.1.0",
+    "lastUpdated": "2024-12-30T00:00:00Z",
+    "source": "https://docs.anthropic.com/en/docs/claude-code/hooks",
+    "checksum": "sha256-placeholder"
+  },
+  "skills": {
+    "version": "1.0.0",
+    "lastUpdated": "2024-12-30T00:00:00Z",
+    "source": "https://docs.anthropic.com/en/docs/claude-code/skills",
+    "checksum": "sha256-placeholder"
+  },
+  "history": []
+}

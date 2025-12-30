@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test: Loki Mode Wrapper Script
+# Test: ELITE Wrapper Script
 # Tests the autonomous wrapper functionality
 
 set -uo pipefail
@@ -28,7 +28,7 @@ trap cleanup EXIT
 cd "$TEST_DIR"
 
 echo "=========================================="
-echo "Loki Mode Wrapper Script Tests"
+echo "ELITE Wrapper Script Tests"
 echo "=========================================="
 echo ""
 
@@ -119,8 +119,8 @@ fi
 
 # Test 5: Completion detection logic
 log_test "Completion detection logic"
-mkdir -p "$TEST_DIR/.loki/state"
-cat > "$TEST_DIR/.loki/state/orchestrator.json" << 'EOF'
+mkdir -p "$TEST_DIR/.elite/state"
+cat > "$TEST_DIR/.elite/state/orchestrator.json" << 'EOF'
 {
     "currentPhase": "COMPLETED",
     "startedAt": "2025-01-15T10:00:00Z",
@@ -131,7 +131,7 @@ EOF
 python3 << EOF
 import json
 
-with open("$TEST_DIR/.loki/state/orchestrator.json") as f:
+with open("$TEST_DIR/.elite/state/orchestrator.json") as f:
     state = json.load(f)
 
 phase = state.get("currentPhase", "")
@@ -158,23 +158,23 @@ fi
 # Test 7: Resume prompt generation
 log_test "Resume prompt generation"
 python3 << 'EOF'
-def build_resume_prompt(retry, prd_path=None, initial_prompt="Loki Mode"):
+def build_resume_prompt(retry, prd_path=None, initial_prompt="ELITE"):
     if retry == 0:
         return initial_prompt
     else:
         if prd_path:
-            return f"Loki Mode - Resume from checkpoint. PRD at {prd_path}. This is retry #{retry} after rate limit. Check .loki/state/ for current progress and continue from where we left off."
+            return f"ELITE - Resume from checkpoint. PRD at {prd_path}. This is retry #{retry} after rate limit. Check .elite/state/ for current progress and continue from where we left off."
         else:
-            return f"Loki Mode - Resume from checkpoint. This is retry #{retry} after rate limit. Check .loki/state/ for current progress and continue from where we left off."
+            return f"ELITE - Resume from checkpoint. This is retry #{retry} after rate limit. Check .elite/state/ for current progress and continue from where we left off."
 
 # Test initial prompt
-assert build_resume_prompt(0) == "Loki Mode"
+assert build_resume_prompt(0) == "ELITE"
 
 # Test resume prompt without PRD
 resume = build_resume_prompt(3)
 assert "Resume from checkpoint" in resume
 assert "retry #3" in resume
-assert ".loki/state/" in resume
+assert ".elite/state/" in resume
 
 # Test resume prompt with PRD
 resume = build_resume_prompt(5, "./docs/req.md")
@@ -224,7 +224,7 @@ fi
 # Test 9: Log file creation
 log_test "Log file and directory creation"
 mkdir -p "$TEST_DIR/.loki"
-LOG_FILE="$TEST_DIR/.loki/wrapper.log"
+LOG_FILE="$TEST_DIR/.elite/wrapper.log"
 echo "[2025-01-15 10:00:00] [INFO] Test log entry" >> "$LOG_FILE"
 
 if [ -f "$LOG_FILE" ] && grep -q "Test log entry" "$LOG_FILE"; then
@@ -235,8 +235,8 @@ fi
 
 # Test 10: COMPLETED file marker detection
 log_test "COMPLETED file marker detection"
-touch "$TEST_DIR/.loki/COMPLETED"
-if [ -f "$TEST_DIR/.loki/COMPLETED" ]; then
+touch "$TEST_DIR/.elite/COMPLETED"
+if [ -f "$TEST_DIR/.elite/COMPLETED" ]; then
     log_pass "COMPLETED file marker detection works"
 else
     log_fail "COMPLETED file marker detection failed"
@@ -248,9 +248,9 @@ python3 << 'EOF'
 import os
 
 # Simulate reading with defaults
-MAX_RETRIES = int(os.environ.get('LOKI_MAX_RETRIES', '50'))
-BASE_WAIT = int(os.environ.get('LOKI_BASE_WAIT', '60'))
-MAX_WAIT = int(os.environ.get('LOKI_MAX_WAIT', '3600'))
+MAX_RETRIES = int(os.environ.get('ELITE_MAX_RETRIES', '50'))
+BASE_WAIT = int(os.environ.get('ELITE_BASE_WAIT', '60'))
+MAX_WAIT = int(os.environ.get('ELITE_MAX_WAIT', '3600'))
 
 assert MAX_RETRIES == 50, f"Expected 50, got {MAX_RETRIES}"
 assert BASE_WAIT == 60, f"Expected 60, got {BASE_WAIT}"
@@ -267,7 +267,7 @@ fi
 
 # Test 12: Wrapper state loading
 log_test "Wrapper state loading and saving"
-STATE_FILE="$TEST_DIR/.loki/wrapper-state.json"
+STATE_FILE="$TEST_DIR/.elite/wrapper-state.json"
 cat > "$STATE_FILE" << 'EOF'
 {
     "retryCount": 7,

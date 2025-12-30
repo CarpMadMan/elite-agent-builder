@@ -1,11 +1,11 @@
 #!/bin/bash
-# Export Loki Mode tasks to Vibe Kanban format
+# Export ELITE tasks to Vibe Kanban format
 # Usage: ./scripts/export-to-vibe-kanban.sh [export_dir]
 
 set -uo pipefail
 
-LOKI_DIR=".loki"
-EXPORT_DIR="${1:-${VIBE_KANBAN_DIR:-$HOME/.vibe-kanban/loki-tasks}}"
+ELITE_DIR=".elite"
+EXPORT_DIR="${1:-${VIBE_KANBAN_DIR:-$HOME/.vibe-kanban/elite-tasks}}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -15,9 +15,9 @@ NC='\033[0m'
 log_info() { echo -e "${GREEN}[INFO]${NC} $*"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 
-# Check if .loki directory exists
-if [ ! -d "$LOKI_DIR" ]; then
-    log_warn "No .loki directory found. Run Loki Mode first."
+# Check if .elite directory exists
+if [ ! -d "$ELITE_DIR" ]; then
+    log_warn "No .elite directory found. Run ELITE first."
     exit 1
 fi
 
@@ -25,18 +25,18 @@ mkdir -p "$EXPORT_DIR"
 
 # Get current phase from orchestrator
 CURRENT_PHASE="UNKNOWN"
-if [ -f "$LOKI_DIR/state/orchestrator.json" ]; then
-    CURRENT_PHASE=$(python3 -c "import json; print(json.load(open('$LOKI_DIR/state/orchestrator.json')).get('currentPhase', 'UNKNOWN'))" 2>/dev/null || echo "UNKNOWN")
+if [ -f "$ELITE_DIR/state/orchestrator.json" ]; then
+    CURRENT_PHASE=$(python3 -c "import json; print(json.load(open('$ELITE_DIR/state/orchestrator.json')).get('currentPhase', 'UNKNOWN'))" 2>/dev/null || echo "UNKNOWN")
 fi
 
-# Map Loki phases to Vibe Kanban columns
+# Map ELITE phases to Vibe Kanban columns
 phase_to_column() {
     case "$1" in
-        BOOTSTRAP|DISCOVERY|ARCHITECTURE) echo "planning" ;;
-        INFRASTRUCTURE|DEVELOPMENT) echo "in-progress" ;;
-        QA) echo "review" ;;
+        BOOTSTRAP|REQUIREMENTS_ANALYSIS|ARCHITECTURE_DESIGN) echo "planning" ;;
+        MCP_IMPLEMENTATION|AGENT_IMPLEMENTATION|INTEGRATION_TESTING) echo "in-progress" ;;
+        DOCUMENTATION) echo "review" ;;
         DEPLOYMENT) echo "deploying" ;;
-        BUSINESS_OPS|GROWTH|COMPLETED) echo "done" ;;
+        COMPLETED) echo "done" ;;
         *) echo "backlog" ;;
     esac
 }
@@ -101,7 +101,7 @@ for task in tasks:
     agent_type = task.get('type', 'unknown')
     swarm = agent_type.split('-')[0] if '-' in agent_type else 'general'
 
-    # Priority mapping (Loki uses 1-10, higher is more important)
+    # Priority mapping (ELITE uses 1-10, higher is more important)
     priority = task.get('priority', 5)
     if priority >= 8:
         priority_tag = "priority-high"
@@ -111,7 +111,7 @@ for task in tasks:
         priority_tag = "priority-low"
 
     vibe_task = {
-        "id": f"loki-{task_id}",
+        "id": f"elite-{task_id}",
         "title": f"[{agent_type}] {payload.get('action', 'Task')}",
         "description": description,
         "status": vibe_status,
@@ -123,11 +123,11 @@ for task in tasks:
             f"phase-$CURRENT_PHASE".lower()
         ],
         "metadata": {
-            "lokiTaskId": task_id,
-            "lokiType": agent_type,
-            "lokiPriority": priority,
-            "lokiPhase": "$CURRENT_PHASE",
-            "lokiRetries": task.get('retries', 0),
+            "eliteTaskId": task_id,
+            "eliteType": agent_type,
+            "elitePriority": priority,
+            "elitePhase": "$CURRENT_PHASE",
+            "eliteRetries": task.get('retries', 0),
             "createdAt": task.get('createdAt', datetime.utcnow().isoformat() + 'Z'),
             "claimedBy": task.get('claimedBy'),
             "lastError": task.get('lastError')
@@ -144,7 +144,7 @@ print(f"EXPORTED:{exported}")
 EOF
 }
 
-log_info "Exporting Loki Mode tasks to Vibe Kanban..."
+log_info "Exporting ELITE tasks to Vibe Kanban..."
 log_info "Export directory: $EXPORT_DIR"
 log_info "Current phase: $CURRENT_PHASE"
 
@@ -152,7 +152,7 @@ TOTAL=0
 
 # Export from each queue
 for queue in pending in-progress completed failed dead-letter; do
-    queue_file="$LOKI_DIR/queue/${queue}.json"
+    queue_file="$ELITE_DIR/queue/${queue}.json"
     if [ -f "$queue_file" ]; then
         result=$(export_queue "$queue_file" "$queue")
         count=$(echo "$result" | grep "EXPORTED:" | cut -d: -f2)
@@ -164,15 +164,15 @@ for queue in pending in-progress completed failed dead-letter; do
 done
 
 # Create summary file
-cat > "$EXPORT_DIR/_loki_summary.json" << EOF
+cat > "$EXPORT_DIR/_elite_summary.json" << EOF
 {
     "exportedAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
     "currentPhase": "$CURRENT_PHASE",
     "totalTasks": $TOTAL,
-    "lokiVersion": "$(cat VERSION 2>/dev/null || echo 'unknown')",
+    "eliteVersion": "$(cat VERSION 2>/dev/null || echo 'unknown')",
     "column": "$(phase_to_column "$CURRENT_PHASE")"
 }
 EOF
 
 log_info "Exported $TOTAL tasks total"
-log_info "Summary written to $EXPORT_DIR/_loki_summary.json"
+log_info "Summary written to $EXPORT_DIR/_elite_summary.json"
