@@ -1,1 +1,5 @@
+# macOS
 .DS_Store
+
+# Note: .elite/ folder IS tracked by git for cross-machine sync
+# This includes briefs, artifacts, logs, and all runtime state
