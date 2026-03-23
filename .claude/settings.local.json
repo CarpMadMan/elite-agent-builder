@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(cat:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git merge:*)",
+      "Bash(chmod:*)",
+      "Bash(./test-prd-coach.sh:*)",
+      "Bash(\"/Users/Matthew/Documents/prospect-discovery-agent/test-prd-coach.sh\")",
+      "Bash(claude:*)",
+      "Bash(cd:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(./scripts/setup.sh:*)"
+    ]
+  }
+}

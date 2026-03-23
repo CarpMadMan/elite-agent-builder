@@ -1,3 +1,10 @@
+# Brain Context (auto-loaded)
+@~/.claude/brain/identity.md
+@~/.claude/brain/projects/elite-agent-builder.md
+@~/.claude/brain/learnings.md
+
+---
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
